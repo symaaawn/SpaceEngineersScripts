@@ -22,6 +22,17 @@ using VRageRender;
 
 namespace IngameScript
 {
+    /**
+     * <summary>
+     * Programming Block Display
+     * </summary>
+     * <remarks>
+     * This script is responsible for displaying information on the programming block's screen.
+     * The first line will always be 'Symeon Mining Corporation', the fictional space mining company.
+     * The second line is the name of the program.
+     * The following lines are the information passed to the display via the <c>RenderDisplay</c> method.
+     * </remarks>
+     */
     partial class Program
     {
         #region private fields
@@ -32,7 +43,12 @@ namespace IngameScript
 
         #endregion
 
-
+        /**
+         * <summary>
+         * Initializes the display.
+         * </summary>
+         * <param name="programName">The name of the program.</param>
+         */
         internal void InitializeDisplay(string programName)
         {
             _drawingSurface = Me.GetSurface(0);
@@ -51,11 +67,17 @@ namespace IngameScript
             RenderDisplay(new string [0]);
         }
 
+        /**
+         * <summary>
+         * Renders the display new.
+         * </summary>
+         * <param name="infos">The information to display. Each Element will be rendered in a new line.</param>
+         */
         internal void RenderDisplay(string[] infos)
         {
             var frame = _drawingSurface.DrawFrame();
 
-            // line 1
+            // Symeon Mining Corporation
             var position = new Vector2(5, 20) + _viewport.Position;
             var sprite = new MySprite
             {
@@ -69,7 +91,7 @@ namespace IngameScript
             };
             frame.Add(sprite);
 
-            // line 2
+            // Program name
             position += new Vector2(0, 20);
             sprite = new MySprite
             {
@@ -85,6 +107,7 @@ namespace IngameScript
 
             position += new Vector2(0, 20);
 
+            // Additional information
             foreach (var info in infos)
             {
                 position += new Vector2(0, 20);

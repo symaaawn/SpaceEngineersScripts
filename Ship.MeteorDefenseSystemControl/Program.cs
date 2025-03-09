@@ -21,6 +21,16 @@ using VRageMath;
 
 namespace IngameScript
 {
+    /**
+     * <summary>
+     * Meteor Defense System Control
+     * </summary>
+     * <remarks>
+     * This script is responsible for controlling the meteor defense system drones.
+     * Calling it with a parameter will change the state of all registered drones.
+     * States are described in <c>MeteorDefenseSystemStateDc</c>
+     * </remarks>
+     */
     partial class Program : MyGridProgram
     {
         #region private fields
@@ -54,6 +64,15 @@ namespace IngameScript
         {
         }
 
+        /**
+         * <summary>
+         * Main entry point
+         * If called with a parameter, the drones will change their state
+         * If called with an IGC message from a drone, the drone will register itself
+         * </summary>
+         * <param name="argument">First argument is the state the drones should change to as int</param>
+         * <param name="updateType">The type of update</param>
+         */
         public void Main(string argument, UpdateType updateType)
         {
             if (_commandLine.TryParse(argument))
@@ -75,8 +94,10 @@ namespace IngameScript
                     {
 
                     }
+
                     RegisteredDrones.Add(new MyTuple<string, long>(igcMessage.Data.ToString(), igcMessage.Source));
                     RegisteredDrones.Distinct();
+                    _logger.LogInfo($"Registered drone {igcMessage.Data} with id {igcMessage.Source}");
                 }
             }
 

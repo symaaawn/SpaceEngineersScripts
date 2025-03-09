@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Utilities;
-using Sandbox.Game.EntityComponents;
+﻿using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -63,7 +62,7 @@ namespace IngameScript
             BatteryBlocks = new List<IMyBatteryBlock>();
             AmmoContainers = new List<IMyCargoContainer>();
 
-            InitializeDisplay("RelativePositioningSystem");
+            InitializeDisplay("MeteorDefenseSystem");
             _logger.AddLogger(new DetailAreaLogger(Echo));
 
             MyIniParseResult result;

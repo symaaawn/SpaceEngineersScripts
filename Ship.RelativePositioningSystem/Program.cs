@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Utilities;
-using Sandbox.Game.EntityComponents;
+﻿using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -21,6 +20,15 @@ using VRageMath;
 
 namespace IngameScript
 {
+    /**
+     * <summary>
+     * Relative Positioning System
+     * </summary>
+     * <remarks>
+     * This script is responsible for broadcasting the current position of the reference remote control.
+     * Drones and other ships can use this information to calculate their relative position to the reference point.
+     * </remarks>
+     */
     public partial class Program : MyGridProgram
     {
         #region private fields
