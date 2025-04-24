@@ -33,6 +33,12 @@ namespace IngameScript
      */
     partial class Program : MyGridProgram
     {
+        #region constants
+
+        private const string ProgramName = "MeteorDefenseSystemControl";
+
+        #endregion
+
         #region private fields
 
         private readonly MyCommandLine _commandLine = new MyCommandLine();
@@ -51,13 +57,13 @@ namespace IngameScript
 
         public Program()
         {
-            RegisteredDrones = new List<MyTuple<string, long>>();
             _logger.AddLogger(new DetailAreaLogger(Echo));
+            _logger.AddLogger(new ProgrammingBlockLogger(Me));
+
+            RegisteredDrones = new List<MyTuple<string, long>>();
 
             _broadcastListenerRegister = IGC.RegisterBroadcastListener(IgcTagDc.MeteorDefenseSystemRegister);
             _broadcastListenerRegister.SetMessageCallback(IgcTagDc.MeteorDefenseSystemRegister);
-
-            InitializeDisplay("MeteorDefenseSystemControl");
         }
 
         public void Save()
@@ -101,7 +107,7 @@ namespace IngameScript
                 }
             }
 
-            RenderDisplay(ParseDroneArray());
+            //RenderDisplay(ParseDroneArray());
         }
 
         #region helpers

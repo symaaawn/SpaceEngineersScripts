@@ -47,10 +47,8 @@ namespace IngameScript
         public Program()
         {
             _logger.AddLogger(new DetailAreaLogger(Echo));
-
+            _logger.AddLogger(new ProgrammingBlockLogger(Me));
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
-
-            InitializeDisplay(ProgramName);
 
             var displays = new List<IMyTextPanel>();
             GridTerminalSystem.GetBlocksOfType(displays,
@@ -83,7 +81,7 @@ namespace IngameScript
 
                 if (observingDisplays.Count == 0)
                     continue;
-                _logger.LogInfo($"Container has {cargoContainer.GetInventory().ItemCount} stuffs");
+
                 InventoryDisplays.Add(new CargoContainerObserver(cargoContainer, observingDisplays));
             }
 
@@ -105,7 +103,7 @@ namespace IngameScript
             }
         }
 
-        private static string[] ContainedItemString(List<MyInventoryItem> items)
+        private static List<string> ContainedItemString(List<MyInventoryItem> items)
         {
             var itemList = new List<string>();
             var itemsSorted = items.OrderBy(i => i == null).ThenBy(i => i.Type.SubtypeId).ToList();
@@ -117,7 +115,7 @@ namespace IngameScript
                 itemList.Add($"{typeString,-15} {amountString,10}");
             }
 
-            return itemList.ToArray();
+            return itemList;
         }
 
         public class CargoContainerObserver
@@ -132,7 +130,7 @@ namespace IngameScript
 
             public string Id { get; private set; }
             public IMyCargoContainer Container { get; private set; }
-            public List<TextPanelDisplay> Displays { get; private set; } = new List<TextPanelDisplay>();
+            public List<StorageInventoryDisplay> Displays { get; private set; } = new List<StorageInventoryDisplay>();
 
             #endregion
 
@@ -142,7 +140,7 @@ namespace IngameScript
             {
                 Container = container;
                 Id = _ini.Get("inventoryDisplay", "inventoryId").ToString();
-                Displays.AddList(displays.Select(d => new TextPanelDisplay(d, ProgramName)).ToList());
+                Displays.AddList(displays.Select(d => new StorageInventoryDisplay(d, ProgramName)).ToList());
             }
 
             #endregion
@@ -152,10 +150,16 @@ namespace IngameScript
                 var items = new List<MyInventoryItem>();
                 var inventory = Container.GetInventory();
                 inventory.GetItems(items);
-                var itemList = ContainedItemString(items);
+                var inventoryCapacity = $"{inventory.CurrentVolume.ToString():N3} / {inventory.MaxVolume.ToString():N3}";
+                var itemList = new List<string>
+                {
+                    $"Inventory: {inventoryCapacity}"
+                };
+
+                itemList.AddRange(ContainedItemString(items));
                 foreach (var display in Displays)
                 {
-                    display.RenderDisplay(itemList);
+                    display.RenderDisplay(inventory.CurrentVolume.ToIntSafe(), inventory.MaxVolume.ToIntSafe(), itemList.ToArray());
                 }
             }
         }

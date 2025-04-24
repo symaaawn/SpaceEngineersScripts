@@ -23,6 +23,12 @@ namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
+        #region constants
+        
+        private const string ProgramName = "MeteorDefenseSystemControl";
+
+        #endregion
+
         #region private fields
 
         private readonly MyCommandLine _commandLine = new MyCommandLine();
@@ -57,13 +63,13 @@ namespace IngameScript
 
         public Program()
         {
+            _logger.AddLogger(new DetailAreaLogger(Echo));
+            _logger.AddLogger(new ProgrammingBlockLogger(Me));
+
             StatusLights = new List<IMyLightingBlock>();
             Turrets = new List<IMyLargeTurretBase>();
             BatteryBlocks = new List<IMyBatteryBlock>();
             AmmoContainers = new List<IMyCargoContainer>();
-
-            InitializeDisplay("MeteorDefenseSystem");
-            _logger.AddLogger(new DetailAreaLogger(Echo));
 
             MyIniParseResult result;
             if (!_ini.TryParse(Me.CustomData, out result))
@@ -77,6 +83,8 @@ namespace IngameScript
             BatteryBlocks.ForEach(b => MaxStoredPower += b.MaxStoredPower);
             var referenceControls = new List<IMyRemoteControl>();
             GridTerminalSystem.GetBlocksOfType(referenceControls, referenceControl => MyIni.HasSection(referenceControl.CustomData, "reference"));
+            if (referenceControls.Count == 0)
+                throw new Exception("No reference remote control found");
             ReferenceControl = referenceControls.FirstOrDefault();
             ReferenceControl.FlightMode = FlightMode.OneWay;
 
@@ -115,7 +123,6 @@ namespace IngameScript
 
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
-            RenderDisplay(new string[] { _state.GetState().ToString() });
             _logger.LogInfo($"Program initialized, id: {_id}");
         }
 
@@ -142,7 +149,7 @@ namespace IngameScript
 
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
-                RenderDisplay(new string[] { $"{_state.GetState()}", $"X: {_homePosition.GetRow(3).X}", $"Y: {_homePosition.GetRow(3).Y}", $"Z: {_homePosition.GetRow(3).Z}" });
+                //RenderDisplay(new string[] { $"{_state.GetState()}", $"X: {_homePosition.GetRow(3).X}", $"Y: {_homePosition.GetRow(3).Y}", $"Z: {_homePosition.GetRow(3).Z}" });
                 RunStateMachine();
                 _logger.LogInfo($"{_state.GetState()} {_angle}");
             }

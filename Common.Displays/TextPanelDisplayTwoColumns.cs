@@ -1,4 +1,4 @@
-﻿using Sandbox.Game.EntityComponents;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -35,16 +35,9 @@ namespace IngameScript
      */
     partial class Program
     {
-        public class TextPanelDisplay
+        public class TextPanelDisplayTwoColumns : TextPanelDisplay
         {
             #region private fields
-
-            #endregion
-
-            #region properties
-
-            public IMyTextSurface DrawingSurface { get; private set; }
-            public RectangleF Viewport { get; private set; }
 
             #endregion
 
@@ -56,20 +49,8 @@ namespace IngameScript
              * </summary>
              * <param name="drawingSurface">The text panel surface to draw on.</param>
              */
-            public TextPanelDisplay(IMyTextSurface drawingSurface)
+            public TextPanelDisplayTwoColumns(IMyTextSurface drawingSurface) : base(drawingSurface)
             {
-                DrawingSurface = drawingSurface;
-
-                Viewport = new RectangleF(
-                    (DrawingSurface.TextureSize - DrawingSurface.SurfaceSize) / 2f,
-                    DrawingSurface.SurfaceSize
-                );
-
-                DrawingSurface.ContentType = ContentType.SCRIPT;
-                DrawingSurface.Script = "";
-                DrawingSurface.ScriptBackgroundColor = Color.Black;
-
-                RenderDisplay(new string[0]);
             }
 
             #endregion
@@ -80,7 +61,7 @@ namespace IngameScript
              * </summary>
              * <param name="infos">The information to display. Each Element will be rendered in a new line.</param>
              */
-            internal virtual void RenderDisplay(string[] infos)
+            internal void RenderDisplay(string[][] infos)
             {
                 var frame = DrawingSurface.DrawFrame();
 
@@ -89,7 +70,7 @@ namespace IngameScript
                 var sprite = new MySprite
                 {
                     Type = SpriteType.TEXT,
-                    Data = CompanyName,
+                    Data = "Symeon Mining Corporation",
                     Position = position,
                     RotationOrScale = 0.8f,
                     Color = Color.Gold,
@@ -115,18 +96,64 @@ namespace IngameScript
                 position += new Vector2(0, 20);
 
                 // Additional information
-                foreach (var info in infos)
+                //foreach (var info in infos)
+                //{
+                //    position += new Vector2(0, 20);
+                //    sprite = new MySprite
+                //    {
+                //        Type = SpriteType.TEXT,
+                //        Data = info,
+                //        Position = position,
+                //        RotationOrScale = 0.8f,
+                //        Color = Color.Gold,
+                //        Alignment = TextAlignment.LEFT,
+                //        FontId = "White"
+                //    };
+                //    frame.Add(sprite);
+                //}
+
+                position += new Vector2(0, 20);
+                sprite = new MySprite
+                {
+                    Type = SpriteType.TEXT,
+                    Data = DrawingSurface.SurfaceSize.Y.ToString() + " - " + DrawingSurface.SurfaceSize.X.ToString(),
+                    Position = position,
+                    RotationOrScale = 0.8f,
+                    Color = Color.Gold,
+                    Alignment = TextAlignment.LEFT,
+                    FontId = "Monospace"
+                };
+                frame.Add(sprite);
+
+                position += new Vector2((DrawingSurface.SurfaceSize.X / 2) + 5, 20);
+                var spriteSize = sprite.Size;
+                sprite = new MySprite
+                {
+                    Type = SpriteType.TEXT,
+                    Data = DrawingSurface.SurfaceSize.Y.ToString() + " - " + DrawingSurface.SurfaceSize.X.ToString(),
+                    Position = position,
+                    RotationOrScale = 0.8f,
+                    Color = Color.Gold,
+                    Alignment = TextAlignment.LEFT,
+                    FontId = "Monospace"
+                };
+                frame.Add(sprite);
+
+
+                var fonts = new List<string>();
+                DrawingSurface.GetFonts(fonts);
+                foreach(var font in fonts)
                 {
                     position += new Vector2(0, 20);
                     sprite = new MySprite
                     {
                         Type = SpriteType.TEXT,
-                        Data = info,
+                        Data = font,
                         Position = position,
                         RotationOrScale = 0.8f,
                         Color = Color.Gold,
                         Alignment = TextAlignment.LEFT,
-                        FontId = "Monospace"
+                        FontId = font
                     };
                     frame.Add(sprite);
                 }

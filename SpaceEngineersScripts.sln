@@ -9,8 +9,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Contracts", "Common.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Logging", "Common.Logging\Common.Logging.shproj", "{EFD37041-B93E-4955-B6D6-F0AAD15857E8}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.ProgrammingBlockDisplay", "Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.shproj", "{0F417806-8852-4225-9238-849CB455016A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drone.MeteorDefenseSystem", "Drone.MeteorDefenseSystem\Drone.MeteorDefenseSystem.csproj", "{738C21F1-D19E-4E02-96A4-6214DF311A60}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Contracts.AutomaticHangarDoor", "Common.Contracts.AutomaticHangarDoor\Common.Contracts.AutomaticHangarDoor.shproj", "{50ECD018-27D9-48F4-AEED-9C73D38EEE15}"
@@ -28,6 +26,8 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Utilities", "Common.Utilities\Common.Utilities.shproj", "{41B9ACB1-E63F-4CC4-867A-33F37DCBF3CE}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Displays", "Common.Displays\Common.Displays.shproj", "{0F8B231E-84AD-4C7C-8083-9770B385B0D3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Constants", "Common.Constants\Common.Constants.shproj", "{7F4A83EE-3DBA-4240-8C0B-155BFF5996AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,31 +67,41 @@ Global
 		SolutionGuid = {6854B167-3238-49FB-81C7-C059A52197FC}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{0f417806-8852-4225-9238-849cb455016a}*SharedItemsImports = 13
 		Common.Displays\Common.Displays.projitems*{0f8b231e-84ad-4c7c-8083-9770b385b0d3}*SharedItemsImports = 13
 		Common.Utilities\Common.Utilities.projitems*{41b9acb1-e63f-4cc4-867a-33f37dcbf3ce}*SharedItemsImports = 13
+		Common.Constants\Common.Constants.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
 		Common.Contracts.AutomaticHangarDoor\Common.Contracts.AutomaticHangarDoor.projitems*{50ecd018-27d9-48f4-aeed-9c73d38eee15}*SharedItemsImports = 13
+		Common.Constants\Common.Constants.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{6c0213ff-a7d2-424b-b2d1-de69ea002112}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.PidControllers\Common.PidControllers.projitems*{74fa6dfc-2e7f-462a-bd40-97680106cceb}*SharedItemsImports = 13
+		Common.Constants\Common.Constants.projitems*{7f4a83ee-3dba-4240-8c0b-155bff5996af}*SharedItemsImports = 13
+		Common.Constants\Common.Constants.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{8a3cdcc5-4b55-4d87-a415-698a0e1ff06f}*SharedItemsImports = 13
+		Common.Constants\Common.Constants.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
-		Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{efd37041-b93e-4955-b6d6-f0aad15857e8}*SharedItemsImports = 13
 	EndGlobalSection

@@ -24,6 +24,7 @@ namespace IngameScript
     {
         #region constants
 
+        private const string ProgramName = "MeteorDefenseSystemControl";
         private const float PistonMovementSpeed = 0.5F; //0.01F;
         private const float BorerPistonMovementSpeed = 0.5F; //0.001F;
         private const float BorerPistonRetractionSpeed = -0.5F;
@@ -75,8 +76,8 @@ namespace IngameScript
             Welders = new List<IMyShipWelder>();
             Projectors = new List<IMyProjector>();
 
-            InitializeDisplay("TunnelBoringMachine");
             _logger.AddLogger(new DetailAreaLogger(Echo));
+            _logger.AddLogger(new ProgrammingBlockLogger(Me));
 
             GridTerminalSystem.GetBlocksOfType(StatusLights, statusLight => MyIni.HasSection(statusLight.CustomData, "status light"));
             GridTerminalSystem.GetBlocksOfType(MergeBlocksBack, mergeBlocksBack => MyIni.HasSection(mergeBlocksBack.CustomData, "merge blocks back"));
@@ -137,10 +138,10 @@ namespace IngameScript
 
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
-                RenderDisplay(new string[] { $"{_state.GetState()}", 
-                    $"Front: {PistonsFront.FirstOrDefault().CurrentPosition}", 
-                    $"Mining: {PistonsBorer.FirstOrDefault().CurrentPosition}",
-                    $"Back: {PistonsBack.FirstOrDefault().CurrentPosition}"});
+                //RenderDisplay(new string[] { $"{_state.GetState()}", 
+                //    $"Front: {PistonsFront.FirstOrDefault().CurrentPosition}", 
+                //    $"Mining: {PistonsBorer.FirstOrDefault().CurrentPosition}",
+                //    $"Back: {PistonsBack.FirstOrDefault().CurrentPosition}"});
                 RunStateMachine();
                 _logger.LogInfo($"{_state.GetState()}");
             }

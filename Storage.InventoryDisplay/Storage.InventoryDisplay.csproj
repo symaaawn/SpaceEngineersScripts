@@ -22,12 +22,12 @@
 
     <Import Project="..\Common.Logging\Common.Logging.projitems" Label="Shared" />
 
-    <Import Project="..\Common.ProgrammingBlockDisplay\Common.ProgrammingBlockDisplay.projitems" Label="Shared" />
-
     <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
 
     <Import Project="..\Common.Contracts\Common.Contracts.projitems" Label="Shared" />
 
     <Import Project="..\Common.Displays\Common.Displays.projitems" Label="Shared" />
+
+    <Import Project="..\Common.Constants\Common.Constants.projitems" Label="Shared" />
 
 </Project>

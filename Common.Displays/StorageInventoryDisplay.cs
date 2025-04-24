@@ -1,4 +1,4 @@
-﻿using Sandbox.Game.EntityComponents;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -35,16 +35,9 @@ namespace IngameScript
      */
     partial class Program
     {
-        public class TextPanelDisplay
+        public class StorageInventoryDisplay : TextPanelDisplay
         {
             #region private fields
-
-            #endregion
-
-            #region properties
-
-            public IMyTextSurface DrawingSurface { get; private set; }
-            public RectangleF Viewport { get; private set; }
 
             #endregion
 
@@ -56,20 +49,8 @@ namespace IngameScript
              * </summary>
              * <param name="drawingSurface">The text panel surface to draw on.</param>
              */
-            public TextPanelDisplay(IMyTextSurface drawingSurface)
+            public StorageInventoryDisplay(IMyTextSurface drawingSurface, string programName) : base(drawingSurface)
             {
-                DrawingSurface = drawingSurface;
-
-                Viewport = new RectangleF(
-                    (DrawingSurface.TextureSize - DrawingSurface.SurfaceSize) / 2f,
-                    DrawingSurface.SurfaceSize
-                );
-
-                DrawingSurface.ContentType = ContentType.SCRIPT;
-                DrawingSurface.Script = "";
-                DrawingSurface.ScriptBackgroundColor = Color.Black;
-
-                RenderDisplay(new string[0]);
             }
 
             #endregion
@@ -80,7 +61,7 @@ namespace IngameScript
              * </summary>
              * <param name="infos">The information to display. Each Element will be rendered in a new line.</param>
              */
-            internal virtual void RenderDisplay(string[] infos)
+            internal void RenderDisplay(int value, int maxvalue, string[] infos)
             {
                 var frame = DrawingSurface.DrawFrame();
 
@@ -112,7 +93,8 @@ namespace IngameScript
                 };
                 frame.Add(sprite);
 
-                position += new Vector2(0, 20);
+                position += new Vector2(0, 40);
+                frame.Add(DrawBar(position, value, maxvalue));
 
                 // Additional information
                 foreach (var info in infos)
@@ -132,6 +114,23 @@ namespace IngameScript
                 }
 
                 frame.Dispose();
+            }
+
+            private MySprite DrawBar(Vector2 position, int value, int maxValue)
+            {
+                var barWidth = 502;
+                var barHeight = 20;
+                var barColor = Color.Green;
+                var barValue = (float)value / (float)maxValue;
+                return new MySprite
+                {
+                    Type = SpriteType.TEXTURE,
+                    Data = "SquareSimple",
+                    Position = position,
+                    Size = new Vector2(barWidth * barValue, barHeight),
+                    Color = barColor,
+                    Alignment = TextAlignment.LEFT
+                };
             }
         }
     }
