@@ -82,6 +82,41 @@ namespace IngameScript
              */
             internal virtual void RenderDisplay(string[] infos)
             {
+                var frameAndPosition = DrawTitle();
+                var frame = frameAndPosition.Item1;
+                var position = frameAndPosition.Item2;
+
+                position += new Vector2(0, 20);
+
+                // Additional information
+                foreach (var info in infos)
+                {
+                    position += new Vector2(0, 20);
+                    var sprite = new MySprite
+                    {
+                        Type = SpriteType.TEXT,
+                        Data = info,
+                        Position = position,
+                        RotationOrScale = 0.8f,
+                        Color = Color.Gold,
+                        Alignment = TextAlignment.LEFT,
+                        FontId = "Monospace"
+                    };
+                    frame.Add(sprite);
+                }
+
+                frame.Dispose();
+            }
+
+
+            /**
+             * <summary>
+             * Draws the program title rows on the display.
+             * </summary>
+             * <returns>The sprite frame and last drawn position.</returns>
+             */
+            protected MyTuple<MySpriteDrawFrame, Vector2> DrawTitle()
+            {
                 var frame = DrawingSurface.DrawFrame();
 
                 // Symeon Mining Corporation
@@ -112,26 +147,7 @@ namespace IngameScript
                 };
                 frame.Add(sprite);
 
-                position += new Vector2(0, 20);
-
-                // Additional information
-                foreach (var info in infos)
-                {
-                    position += new Vector2(0, 20);
-                    sprite = new MySprite
-                    {
-                        Type = SpriteType.TEXT,
-                        Data = info,
-                        Position = position,
-                        RotationOrScale = 0.8f,
-                        Color = Color.Gold,
-                        Alignment = TextAlignment.LEFT,
-                        FontId = "Monospace"
-                    };
-                    frame.Add(sprite);
-                }
-
-                frame.Dispose();
+                return new MyTuple<MySpriteDrawFrame, Vector2>(frame, position);
             }
 
             protected MySprite DrawBar(Vector2 position, int value, int maxValue)

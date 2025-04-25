@@ -63,42 +63,16 @@ namespace IngameScript
              */
             internal void RenderDisplay(List<PowerOverviewDc> infos)
             {
-                var frame = DrawingSurface.DrawFrame();
-
-                // Symeon Mining Corporation
-                var position = new Vector2(5, 20) + Viewport.Position;
-                var sprite = new MySprite
-                {
-                    Type = SpriteType.TEXT,
-                    Data = CompanyName,
-                    Position = position,
-                    RotationOrScale = 0.8f,
-                    Color = Color.Gold,
-                    Alignment = TextAlignment.LEFT,
-                    FontId = "Monospace"
-                };
-                frame.Add(sprite);
-
-                // Program name
-                position += new Vector2(0, 20);
-                sprite = new MySprite
-                {
-                    Type = SpriteType.TEXT,
-                    Data = ProgramName,
-                    Position = position,
-                    RotationOrScale = 0.8f,
-                    Color = Color.Gold,
-                    Alignment = TextAlignment.LEFT,
-                    FontId = "Monospace"
-                };
-                frame.Add(sprite);
+                var frameAndPosition = DrawTitle();
+                var frame = frameAndPosition.Item1;
+                var position = frameAndPosition.Item2;
 
                 // Additional information
                 foreach (var info in infos)
                 {
                     position += new Vector2(0, 20);
                     var infoString = $"{info.Name.Truncate(10):-10}: {info.CurrentPowerOutput:N3}/{info.MaxPowerOutput:N3}";
-                    sprite = new MySprite
+                    var sprite = new MySprite
                     {
                         Type = SpriteType.TEXT,
                         Data = infoString,
