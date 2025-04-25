@@ -49,7 +49,7 @@ namespace IngameScript
              * </summary>
              * <param name="drawingSurface">The text panel surface to draw on.</param>
              */
-            public StorageInventoryDisplay(IMyTextSurface drawingSurface, string programName) : base(drawingSurface)
+            public StorageInventoryDisplay(IMyTextSurface drawingSurface) : base(drawingSurface)
             {
             }
 
@@ -114,23 +114,6 @@ namespace IngameScript
                 }
 
                 frame.Dispose();
-            }
-
-            private MySprite DrawBar(Vector2 position, int value, int maxValue)
-            {
-                var barWidth = 502;
-                var barHeight = 20;
-                var barColor = Color.Green;
-                var barValue = (float)value / (float)maxValue;
-                return new MySprite
-                {
-                    Type = SpriteType.TEXTURE,
-                    Data = "SquareSimple",
-                    Position = position,
-                    Size = new Vector2(barWidth * barValue, barHeight),
-                    Color = barColor,
-                    Alignment = TextAlignment.LEFT
-                };
             }
         }
     }

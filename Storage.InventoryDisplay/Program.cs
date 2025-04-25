@@ -40,7 +40,7 @@ namespace IngameScript
 
         #region properties
 
-        public List<CargoContainerObserver> InventoryDisplays { get; private set; } = new List<CargoContainerObserver>();
+        public List<CargoContainerObserver> CargoContainerObservers { get; private set; } = new List<CargoContainerObserver>();
 
         #endregion
 
@@ -82,10 +82,10 @@ namespace IngameScript
                 if (observingDisplays.Count == 0)
                     continue;
 
-                InventoryDisplays.Add(new CargoContainerObserver(cargoContainer, observingDisplays));
+                CargoContainerObservers.Add(new CargoContainerObserver(cargoContainer, observingDisplays));
             }
 
-            _logger.LogInfo($"Found {InventoryDisplays.Count} cargo container - display pairs");
+            _logger.LogInfo($"Found {CargoContainerObservers.Count} cargo container - display pairs");
         }
 
         public void Save()
@@ -96,7 +96,7 @@ namespace IngameScript
         {
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
-                foreach (var display in InventoryDisplays)
+                foreach (var display in CargoContainerObservers)
                 {
                     display.UpdateDisplays();
                 }
@@ -106,7 +106,7 @@ namespace IngameScript
         private static List<string> ContainedItemString(List<MyInventoryItem> items)
         {
             var itemList = new List<string>();
-            var itemsSorted = items.OrderBy(i => i == null).ThenBy(i => i.Type.SubtypeId).ToList();
+            var itemsSorted = items.OrderBy(i => i == null).ThenBy(i => i.Type.ToString()).ToList();
             foreach (var item in itemsSorted)
             {
                 var amount = item.Amount.RawValue / 1000000f;
@@ -140,7 +140,7 @@ namespace IngameScript
             {
                 Container = container;
                 Id = _ini.Get("inventoryDisplay", "inventoryId").ToString();
-                Displays.AddList(displays.Select(d => new StorageInventoryDisplay(d, ProgramName)).ToList());
+                Displays.AddList(displays.Select(d => new StorageInventoryDisplay(d)).ToList());
             }
 
             #endregion
