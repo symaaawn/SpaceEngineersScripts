@@ -361,3 +361,21 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Storage.InventoryDisplay/Storage.InventoryDisplay.mdk.local.ini
+/Ship.TunnelBoringMachine/Ship.TunnelBoringMachine.mdk.local.ini
+/Display.PowerOverview/Display.PowerOverview.mdk.local.ini
+/Ship.RelativePositioningSystem/Ship.RelativePositioningSystem.mdk.local.ini
+/Ship.MeteorDefenseSystemControl/Ship.MeteorDefenseSystemControl.mdk.local.ini
+/Drone.MeteorDefenseSystem/Drone.MeteorDefenseSystem.mdk.local.ini
+/Display.PowerOverview/Display.PowerOverview.mdk.local.ini
+/Drone.MeteorDefenseSystem/Drone.MeteorDefenseSystem.mdk.local.ini
+/Ship.MeteorDefenseSystemControl/Ship.MeteorDefenseSystemControl.mdk.local.ini
+/Ship.RelativePositioningSystem/Ship.RelativePositioningSystem.csproj
+/Ship.RelativePositioningSystem/Ship.RelativePositioningSystem.mdk.local.ini
+/Ship.TunnelBoringMachine/Ship.TunnelBoringMachine.mdk.local.ini
+/Display.PowerOverview/Display.PowerOverview.mdk.local.ini
+/Drone.MeteorDefenseSystem/Drone.MeteorDefenseSystem.mdk.local.ini
+/Ship.MeteorDefenseSystemControl/Ship.MeteorDefenseSystemControl.mdk.local.ini
+/Ship.RelativePositioningSystem/Ship.RelativePositioningSystem.mdk.local.ini
+/Ship.TunnelBoringMachine/Ship.TunnelBoringMachine.mdk.local.ini
+/Storage.InventoryDisplay/Storage.InventoryDisplay.mdk.local.ini
