@@ -27,7 +27,6 @@ namespace IngameScript
         #region constants
 
         private const string ProgramName = "InventoryDisplay";
-        private const int DisplayWidth = 30;
 
         #endregion
 
@@ -82,10 +81,8 @@ namespace IngameScript
                 if (observingDisplays.Count == 0)
                     continue;
 
-                CargoContainerObservers.Add(new CargoContainerObserver(cargoContainer, observingDisplays));
+                CargoContainerObservers.Add(new CargoContainerObserver(this, cargoContainer, observingDisplays));
             }
-
-            _logger.LogInfo($"Found {CargoContainerObservers.Count} cargo container - display pairs");
         }
 
         public void Save()
@@ -122,6 +119,7 @@ namespace IngameScript
         {
             #region private fields
 
+            private readonly Program _program;
             private readonly MyIni _ini = new MyIni();
 
             #endregion
@@ -136,11 +134,13 @@ namespace IngameScript
 
             #region construction
 
-            public CargoContainerObserver(IMyCargoContainer container, List<IMyTextPanel> displays)
+            public CargoContainerObserver(Program program, IMyCargoContainer container, List<IMyTextPanel> displays)
             {
+                _program = program;
                 Container = container;
                 Id = _ini.Get("inventoryDisplay", "inventoryId").ToString();
                 Displays.AddList(displays.Select(d => new StorageInventoryDisplay(d)).ToList());
+                _program._logger.LogInfo($"Found {displays.Count} displays for cargo container {container.CustomName}");
             }
 
             #endregion

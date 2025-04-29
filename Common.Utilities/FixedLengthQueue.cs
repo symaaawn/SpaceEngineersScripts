@@ -76,6 +76,11 @@ namespace IngameScript
             {
                 return _queue.ToArray();
             }
+
+            public List<T> ToList()
+            {
+                return _queue.ToList();
+            }
         }
     }
 }

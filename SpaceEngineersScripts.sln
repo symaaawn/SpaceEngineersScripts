@@ -17,10 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ship.MeteorDefenseSystemCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ship.TunnelBoringMachine", "Ship.TunnelBoringMachine\Ship.TunnelBoringMachine.csproj", "{7F91A392-09CD-40D8-91FD-CC231286F3DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drone.GravityAlignmentTest", "Drone.GravityAlignmentTest\Drone.GravityAlignmentTest.csproj", "{B9AA1350-2454-44AE-98E3-C88425F6B574}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.PidControllers", "Common.PidControllers\Common.PidControllers.shproj", "{74FA6DFC-2E7F-462A-BD40-97680106CCEB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.InventoryDisplay", "Storage.InventoryDisplay\Storage.InventoryDisplay.csproj", "{EC6ABDC0-CA79-4368-9C3E-C31F13250D75}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Utilities", "Common.Utilities\Common.Utilities.shproj", "{41B9ACB1-E63F-4CC4-867A-33F37DCBF3CE}"
@@ -53,10 +49,6 @@ Global
 		{7F91A392-09CD-40D8-91FD-CC231286F3DC}.Debug|x64.Build.0 = Debug|x64
 		{7F91A392-09CD-40D8-91FD-CC231286F3DC}.Release|x64.ActiveCfg = Release|x64
 		{7F91A392-09CD-40D8-91FD-CC231286F3DC}.Release|x64.Build.0 = Release|x64
-		{B9AA1350-2454-44AE-98E3-C88425F6B574}.Debug|x64.ActiveCfg = Debug|x64
-		{B9AA1350-2454-44AE-98E3-C88425F6B574}.Debug|x64.Build.0 = Debug|x64
-		{B9AA1350-2454-44AE-98E3-C88425F6B574}.Release|x64.ActiveCfg = Release|x64
-		{B9AA1350-2454-44AE-98E3-C88425F6B574}.Release|x64.Build.0 = Release|x64
 		{EC6ABDC0-CA79-4368-9C3E-C31F13250D75}.Debug|x64.ActiveCfg = Debug|x64
 		{EC6ABDC0-CA79-4368-9C3E-C31F13250D75}.Debug|x64.Build.0 = Debug|x64
 		{EC6ABDC0-CA79-4368-9C3E-C31F13250D75}.Release|x64.ActiveCfg = Release|x64
@@ -91,7 +83,6 @@ Global
 		Common.Displays\Common.Displays.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
-		Common.PidControllers\Common.PidControllers.projitems*{74fa6dfc-2e7f-462a-bd40-97680106cceb}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{7f4a83ee-3dba-4240-8c0b-155bff5996af}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
@@ -99,11 +90,6 @@ Global
 		Common.Logging\Common.Logging.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{8a3cdcc5-4b55-4d87-a415-698a0e1ff06f}*SharedItemsImports = 13
-		Common.Constants\Common.Constants.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
-		Common.Contracts\Common.Contracts.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
-		Common.Displays\Common.Displays.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
-		Common.Logging\Common.Logging.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
-		Common.Utilities\Common.Utilities.projitems*{b9aa1350-2454-44ae-98e3-c88425f6b574}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5

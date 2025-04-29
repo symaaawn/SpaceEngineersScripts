@@ -10,12 +10,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)contracts\PowerOverviewDc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Display.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayPowerOverview.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)helpers\SpriteHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StorageInventoryDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextPanelDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TextPanelDisplayTwoColumns.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Contracts\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
   </ItemGroup>
 </Project>

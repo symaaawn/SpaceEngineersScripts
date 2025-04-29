@@ -22,7 +22,7 @@ using UpdateType = Sandbox.ModAPI.Ingame.UpdateType;
 
 namespace IngameScript
 {
-    partial class Program : MyGridProgram
+    public partial class Program : MyGridProgram
     {
         #region constants
 

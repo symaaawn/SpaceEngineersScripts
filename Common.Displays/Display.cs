@@ -1,4 +1,4 @@
-﻿using Sandbox.Game.EntityComponents;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -35,8 +35,17 @@ namespace IngameScript
      */
     partial class Program
     {
-        public class TextPanelDisplay : Display
+        public abstract class Display
         {
+            #region properties
+
+            protected IMyTextSurface DrawingSurface { get; private set; }
+            public RectangleF Viewport { get; private set; }
+            internal MySpriteDrawFrame Frame { get; private set; }
+            protected Vector2 Position { get; set; }
+
+            #endregion
+
             #region construction
 
             /**
@@ -45,43 +54,37 @@ namespace IngameScript
              * </summary>
              * <param name="drawingSurface">The text panel surface to draw on.</param>
              */
-            public TextPanelDisplay(IMyTextSurface drawingSurface) : base(drawingSurface)
+            protected Display(IMyTextSurface drawingSurface)
             {
-            }
+                DrawingSurface = drawingSurface;
 
+                Viewport = new RectangleF(
+                    (DrawingSurface.TextureSize - DrawingSurface.SurfaceSize) / 2f,
+                    DrawingSurface.SurfaceSize
+                );
+
+                DrawingSurface.ContentType = ContentType.SCRIPT;
+                DrawingSurface.Script = "";
+                DrawingSurface.ScriptBackgroundColor = Color.Black;
+
+                var frame = DrawingSurface.DrawFrame();
+                RenderDisplay();
+            }
 
             #endregion
 
             /**
              * <summary>
-             * Renders the display new.
+             * Renders the display new and adds the title rows.
              * </summary>
-             * <param name="infos">The information to display. Each Element will be rendered in a new line.</param>
              */
-            internal void RenderDisplay(List<string> infos)
+            internal void RenderDisplay()
             {
-                RenderDisplay();
+                Frame = DrawingSurface.DrawFrame();
+                Position = new Vector2(5, 20) + Viewport.Position;
+                var titleSprite = SpriteHelper.DrawTitle(Position);
 
-                Position += new Vector2(0, 20);
-
-                // Additional information
-                foreach (var info in infos)
-                {
-                    Position += new Vector2(0, 20);
-                    var sprite = new MySprite
-                    {
-                        Type = SpriteType.TEXT,
-                        Data = info,
-                        Position = Position,
-                        RotationOrScale = 0.8f,
-                        Color = Color.Gold,
-                        Alignment = TextAlignment.LEFT,
-                        FontId = "Monospace"
-                    };
-                    Frame.Add(sprite);
-                }
-
-                Frame.Dispose();
+                Frame.AddRange(titleSprite);
             }
         }
     }

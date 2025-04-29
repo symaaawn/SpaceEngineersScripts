@@ -37,10 +37,6 @@ namespace IngameScript
     {
         public class DisplayPowerOverview : TextPanelDisplay
         {
-            #region private fields
-
-            #endregion
-
             #region construction
 
             /**
@@ -63,29 +59,27 @@ namespace IngameScript
              */
             internal void RenderDisplay(List<PowerOverviewDc> infos)
             {
-                var frameAndPosition = DrawTitle();
-                var frame = frameAndPosition.Item1;
-                var position = frameAndPosition.Item2;
+                RenderDisplay();
 
                 // Additional information
                 foreach (var info in infos)
                 {
-                    position += new Vector2(0, 20);
+                    Position += new Vector2(0, 20);
                     var infoString = $"{info.Name.Truncate(10):-10}: {info.CurrentPowerOutput:N3}/{info.MaxPowerOutput:N3}";
                     var sprite = new MySprite
                     {
                         Type = SpriteType.TEXT,
                         Data = infoString,
-                        Position = position,
+                        Position = Position,
                         RotationOrScale = 0.8f,
                         Color = Color.Gold,
                         Alignment = TextAlignment.LEFT,
                         FontId = "Monospace"
                     };
-                    frame.Add(sprite);
+                    Frame.Add(sprite);
                 }
 
-                frame.Dispose();
+                Frame.Dispose();
             }
         }
     }

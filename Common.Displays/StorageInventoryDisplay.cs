@@ -27,20 +27,13 @@ namespace IngameScript
      * Text Panel Display
      * </summary>
      * <remarks>
-     * This script is responsible for displaying information on a text panel screen.
-     * The first line will always be 'Symeon Mining Corporation', the fictional space mining company.
-     * The second line is the name of the program.
-     * The following lines are the information passed to the display via the <c>RenderDisplay</c> method.
+     * This class is responsible for displaying information about the storage inventory on a text panel screen.
      * </remarks>
      */
     partial class Program
     {
         public class StorageInventoryDisplay : TextPanelDisplay
         {
-            #region private fields
-
-            #endregion
-
             #region construction
 
             /**
@@ -59,35 +52,36 @@ namespace IngameScript
              * <summary>
              * Renders the display new.
              * </summary>
+             * <param name="value">The current value to be displayed</param>
+             * <param name="maxvalue">The maximum value to be displayed</param>
              * <param name="infos">The information to display. Each Element will be rendered in a new line.</param>
              */
-            internal void RenderDisplay(int value, int maxvalue, string[] infos)
+            internal void RenderDisplay(float value, float maxvalue, string[] infos)
             {
-                var frameAndPosition = DrawTitle();
-                var frame = frameAndPosition.Item1;
-                var position = frameAndPosition.Item2;
+                RenderDisplay();
 
-                position += new Vector2(0, 40);
-                frame.Add(DrawBar(position, value, maxvalue));
+                Position += new Vector2(5, 40);
+                Frame.Add(SpriteHelper.DrawBar(Position, Viewport.Width - 10, value, maxvalue));
+                Position += new Vector2(-5, 0);
 
                 // Additional information
                 foreach (var info in infos)
                 {
-                    position += new Vector2(0, 20);
+                    Position += new Vector2(0, 20);
                     var sprite = new MySprite
                     {
                         Type = SpriteType.TEXT,
                         Data = info,
-                        Position = position,
+                        Position = Position,
                         RotationOrScale = 0.8f,
                         Color = Color.Gold,
                         Alignment = TextAlignment.LEFT,
                         FontId = "Monospace"
                     };
-                    frame.Add(sprite);
+                    Frame.Add(sprite);
                 }
 
-                frame.Dispose();
+                Frame.Dispose();
             }
         }
     }

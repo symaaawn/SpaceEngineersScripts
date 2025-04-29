@@ -32,8 +32,8 @@ namespace IngameScript
 
             #region private fields
 
-            private TextPanelDisplay _programmingBlockDisplay;
-            private FixedLengthQueue<string> _logHistory;
+            private readonly TextPanelDisplay _programmingBlockDisplay;
+            private readonly FixedLengthQueue<string> _logHistory;
 
             #endregion
 
@@ -51,7 +51,7 @@ namespace IngameScript
             public void Log(string message)
             {
                 _logHistory.Enqueue(message);
-                _programmingBlockDisplay.RenderDisplay(_logHistory.ToArray());
+                _programmingBlockDisplay.RenderDisplay(_logHistory.ToList());
             }
         }
     }
