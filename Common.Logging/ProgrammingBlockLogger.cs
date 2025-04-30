@@ -33,7 +33,7 @@ namespace IngameScript
             #region private fields
 
             private readonly TextPanelDisplay _programmingBlockDisplay;
-            private readonly FixedLengthQueue<string> _logHistory;
+            //private readonly FixedLengthStringQueue _logHistory;
 
             #endregion
 
@@ -43,15 +43,15 @@ namespace IngameScript
             {
                 _programmingBlockDisplay = new TextPanelDisplay(programmableBlock.GetSurface(0));
                 var lines = (int)(_programmingBlockDisplay.Viewport.Height / CharacterHeight) - 3;
-                _logHistory = new FixedLengthQueue<string>(lines);
+                //_logHistory = new FixedLengthStringQueue (lines);
             }
 
             #endregion
 
             public void Log(string message)
             {
-                _logHistory.Enqueue(message);
-                _programmingBlockDisplay.RenderDisplay(_logHistory.ToList());
+                //_logHistory.Enqueue(message);
+                _programmingBlockDisplay.RenderDisplay(new List<string>() { message });// _logHistory.ToList());
             }
         }
     }

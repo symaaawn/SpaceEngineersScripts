@@ -27,6 +27,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Constants", "Common.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.PowerOverview", "Display.PowerOverview\Display.PowerOverview.csproj", "{CCE7DF76-ED69-489F-96F0-F56E344EC97D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.HydrogenOxygenOverview", "Display.HydrogenOxygenOverview\Display.HydrogenOxygenOverview.csproj", "{AD3B8863-9B82-4BE0-9458-8415D294D000}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -57,6 +59,10 @@ Global
 		{CCE7DF76-ED69-489F-96F0-F56E344EC97D}.Debug|x64.Build.0 = Debug|x64
 		{CCE7DF76-ED69-489F-96F0-F56E344EC97D}.Release|x64.ActiveCfg = Release|x64
 		{CCE7DF76-ED69-489F-96F0-F56E344EC97D}.Release|x64.Build.0 = Release|x64
+		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Debug|x64.ActiveCfg = Debug|x64
+		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Debug|x64.Build.0 = Debug|x64
+		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Release|x64.ActiveCfg = Release|x64
+		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

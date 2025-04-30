@@ -60,7 +60,7 @@ namespace IngameScript
             {
                 RenderDisplay();
 
-                Position += new Vector2(5, 40);
+                Position += new Vector2(5, 0);
                 Frame.Add(SpriteHelper.DrawBar(Position, Viewport.Width - 10, value, maxvalue));
                 Position += new Vector2(-5, 0);
 

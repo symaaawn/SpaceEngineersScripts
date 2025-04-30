@@ -108,11 +108,25 @@ namespace IngameScript
                     if (powerProducer is IMyBatteryBlock)
                     {
                         var batteryBlock = (IMyBatteryBlock)powerProducer;
-                        powerOverview = new PowerOverviewDc(batteryBlock.CustomName, batteryBlock.MaxOutput, batteryBlock.CurrentOutput, batteryBlock.MaxStoredPower, batteryBlock.CurrentStoredPower);
+                        powerOverview = new PowerOverviewDc(batteryBlock.CustomName, PowerProducerType.Battery, batteryBlock.MaxOutput, batteryBlock.CurrentOutput, batteryBlock.MaxStoredPower, batteryBlock.CurrentStoredPower);
+                    }
+                    else if (powerProducer is IMyReactor) {
+                        var reactor = (IMyReactor)powerProducer;
+                        powerOverview = new PowerOverviewDc(reactor.CustomName, PowerProducerType.Reactor, reactor.MaxOutput, reactor.CurrentOutput);
+                    }
+                    else if (powerProducer is IMySolarPanel)
+                    {
+                        var solarPanel = (IMySolarPanel)powerProducer;
+                        powerOverview = new PowerOverviewDc(solarPanel.CustomName, PowerProducerType.SolarPanel, solarPanel.MaxOutput, solarPanel.CurrentOutput);
+                    }
+                    else if (powerProducer is IMyWindTurbine)
+                    {
+                        var windTurbine = (IMyWindTurbine)powerProducer;
+                        powerOverview = new PowerOverviewDc(windTurbine.CustomName, PowerProducerType.Battery, windTurbine.MaxOutput, windTurbine.CurrentOutput);
                     }
                     else
                     {
-                        powerOverview = new PowerOverviewDc(powerProducer.CustomName, powerProducer.MaxOutput, powerProducer.CurrentOutput);
+                        powerOverview = new PowerOverviewDc(powerProducer.CustomName, "Unknown", powerProducer.MaxOutput, powerProducer.CurrentOutput);
                     }
                     powerOverviews.Add(powerOverview);
                 }

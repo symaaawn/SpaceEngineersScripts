@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using VRage;
 using VRage.Collections;
 using VRage.Game;
@@ -60,16 +61,15 @@ namespace IngameScript
             internal void RenderDisplay(List<PowerOverviewDc> infos)
             {
                 RenderDisplay();
-
-                // Additional information
-                foreach (var info in infos)
+                var powerProducerTypes = infos.Select(info => info.Type).Distinct().ToList();
+                
+                foreach (var powerProducerType in powerProducerTypes)
                 {
                     Position += new Vector2(0, 20);
-                    var infoString = $"{info.Name.Truncate(10):-10}: {info.CurrentPowerOutput:N3}/{info.MaxPowerOutput:N3}";
                     var sprite = new MySprite
                     {
                         Type = SpriteType.TEXT,
-                        Data = infoString,
+                        Data = powerProducerType,
                         Position = Position,
                         RotationOrScale = 0.8f,
                         Color = Color.Gold,
@@ -77,6 +77,30 @@ namespace IngameScript
                         FontId = "Monospace"
                     };
                     Frame.Add(sprite);
+
+                    // Additional information
+                    foreach (var info in infos.Where(i => i.Type.Equals(powerProducerType)))
+                    {
+                        Position += new Vector2(0, 20);
+                        // we have the type as headline, so just extract the number of the power producer
+                        var powerProducerNumber = int.Parse(info.Name.Split(' ').Last());
+                        var infoString = $"{powerProducerNumber:D2}: {info.CurrentPowerOutput:00.000}/{info.MaxPowerOutput:00.000}MW {info.CurrentPowerOutput / info.MaxPowerOutput:000%}";
+                        if(info.Type.Equals("Battery"))
+                        {
+                            infoString += $" ({info.StorageCapacity / info.MaxCapacity:000%})";
+                        }
+                        sprite = new MySprite
+                        {
+                            Type = SpriteType.TEXT,
+                            Data = infoString,
+                            Position = Position,
+                            RotationOrScale = 0.8f,
+                            Color = Color.Gold,
+                            Alignment = TextAlignment.LEFT,
+                            FontId = "Monospace"
+                        };
+                        Frame.Add(sprite);
+                    }
                 }
 
                 Frame.Dispose();

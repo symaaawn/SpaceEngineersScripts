@@ -83,8 +83,10 @@ namespace IngameScript
                 Frame = DrawingSurface.DrawFrame();
                 Position = new Vector2(5, 20) + Viewport.Position;
                 var titleSprite = SpriteHelper.DrawTitle(Position);
-
+                
                 Frame.AddRange(titleSprite);
+
+                Position += new Vector2(0, 30);
             }
         }
     }

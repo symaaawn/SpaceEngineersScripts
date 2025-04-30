@@ -1,32 +1,15 @@
-using Sandbox.Game.EntityComponents;
-using Sandbox.ModAPI.Ingame;
-using Sandbox.ModAPI.Interfaces;
-using SpaceEngineers.Game.ModAPI.Ingame;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using VRage;
-using VRage.Collections;
-using VRage.Game;
-using VRage.Game.Components;
-using VRage.Game.GUI.TextPanel;
-using VRage.Game.ModAPI.Ingame;
-using VRage.Game.ModAPI.Ingame.Utilities;
-using VRage.Game.ObjectBuilders.Definitions;
-using VRageMath;
 
 namespace IngameScript
 {
     partial class Program
     {
-        public class FixedLengthQueue<T>
+        public class FixedLengthStringQueue
         {
             #region private fields
 
-            private readonly Queue<T> _queue;
+            private readonly Queue<string> _queue;
             private readonly int _maxSize;
 
             #endregion
@@ -39,16 +22,16 @@ namespace IngameScript
 
             #region construction
 
-            public FixedLengthQueue(int maxSize)
+            public FixedLengthStringQueue(int maxSize)
             {
                 _maxSize = maxSize;
-                _queue = new Queue<T>(maxSize);
+                _queue = new Queue<string>(maxSize);
             }
 
             #endregion
 
 
-            public void Enqueue(T item)
+            public void Enqueue(string item)
             {
                 if (_queue.Count >= _maxSize)
                 {
@@ -57,12 +40,12 @@ namespace IngameScript
                 _queue.Enqueue(item);
             }
 
-            public T Dequeue()
+            public string Dequeue()
             {
                 return _queue.Dequeue();
             }
 
-            public T Peek()
+            public string Peek()
             {
                 return _queue.Peek();
             }
@@ -72,12 +55,12 @@ namespace IngameScript
                 _queue.Clear();
             }
 
-            public T[] ToArray()
+            public string[] ToArray()
             {
                 return _queue.ToArray();
             }
 
-            public List<T> ToList()
+            public List<string> ToList()
             {
                 return _queue.ToList();
             }

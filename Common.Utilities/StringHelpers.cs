@@ -20,9 +20,9 @@ using VRageMath;
 
 namespace IngameScript
 {
-    public static class StringExtensions
+    public static class StringHelpers
     {
-        public static string Truncate(this string s, int length)
+        public static string Truncate(string s, int length)
         {
             if (s == null)
             {

@@ -108,7 +108,7 @@ namespace IngameScript
             {
                 var amount = item.Amount.RawValue / 1000000f;
                 var amountString = amount < 1000 ? $"{amount:N3} " : $"{amount / 1000:N3}K";
-                var typeString = item.Type.SubtypeId.ToString().Truncate(15);
+                var typeString = StringHelpers.Truncate(item.Type.SubtypeId.ToString(), 15);
                 itemList.Add($"{typeString,-15} {amountString,10}");
             }
 
