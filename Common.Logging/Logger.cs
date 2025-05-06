@@ -22,6 +22,11 @@ namespace IngameScript
 {
     partial class Program
     {
+        /** 
+         * <summary>
+         * Composite logger that can use multiple loggers that are implementing the <c>ILogger</c> interface.
+         * </summary>
+         */
         public class Logger : ILogger
         {
             #region private fields
