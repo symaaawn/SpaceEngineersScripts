@@ -32,7 +32,11 @@ namespace IngameScript
             public float YieldRate { get; set; }
             public float PowerEfficiency { get; set; }
 
+            public List<IMyLightingBlock> StatusLights { get; set; }
+
             #endregion
+
+            #region construction
 
             public RefineryOverview(IMyRefinery refinery)
             {
@@ -41,7 +45,10 @@ namespace IngameScript
                 RefineSpeed = detailedInfo.RefineSpeed;
                 YieldRate = detailedInfo.YieldRate;
                 PowerEfficiency = detailedInfo.PowerEfficiency;
+                StatusLights = new List<IMyLightingBlock>();
             }
+
+            #endregion
         }
     }
 }

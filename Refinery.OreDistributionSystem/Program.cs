@@ -1,4 +1,5 @@
-﻿using Sandbox.Game.Entities.Cube;
+﻿using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
@@ -62,6 +63,8 @@ namespace IngameScript
 
             Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
+            MyIniParseResult result;
+
             var refineries = new List<IMyRefinery>();
             GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, "oreDistributionSystem"));
             foreach (var refinery in refineries)
@@ -87,6 +90,20 @@ namespace IngameScript
                 _logger.LogDebug($"{refinery.Refinery.CustomName}: Speed {refinery.RefineSpeed} / Yield {refinery.YieldRate} / Efficiency {refinery.PowerEfficiency}");
             }
 
+            var statusLights = new List<IMyLightingBlock>();
+            GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, "oreDistributionSystem"));
+            foreach (var statusLight in statusLights)
+            {
+                if (!_ini.TryParse(statusLight.CustomData, out result))
+                    throw new Exception(result.ToString());
+
+                var id = _ini.Get("oreDistributionSystem", "machineName").ToString();
+                if (string.IsNullOrEmpty(id))
+                    continue;
+                _logger.LogDebug($"Found status light {statusLight.CustomName} for {id}");
+
+                Refineries.FirstOrDefault(r => r.Refinery.CustomName.Contains(id))?.StatusLights.Add(statusLight);
+            }
         }
 
         public void Save()
@@ -112,21 +129,52 @@ namespace IngameScript
 
                 foreach (var refinery in Refineries)
                 {
-                    var refineryOres = new List<MyInventoryItem>();
-                    refinery.Refinery.InputInventory.GetItems(refineryOres);
-                    if (refineryOres.All(o => o.Amount < (MyFixedPoint)(OreConsumptions.GetOreConsumption(o.Type.SubtypeId).KgPerSecond * RefineryBuffer)))
+                    if (ores.Count > 0)
                     {
-                        if (refinery.YieldRate < refinery.RefineSpeed)
+                        var refineryOres = new List<MyInventoryItem>();
+                        refinery.Refinery.InputInventory.GetItems(refineryOres);
+                        if (refineryOres.All(o => o.Amount < (MyFixedPoint)(OreConsumptions.GetOreConsumption(o.Type.SubtypeId).KgPerSecond * RefineryBuffer)))
                         {
-                            var ore = ores.FirstOrDefault();
-                            _logger.LogDebug($"Transferring {ore.Item.Type.SubtypeId} to {refinery.Refinery.CustomName}");
-                            refinery.Refinery.InputInventory.TransferItemFrom(ore.Inventory, ore.Item, (MyFixedPoint)(OreConsumptions.GetOreConsumption(ore.SubType).KgPerSecond * RefineryBuffer));
+                            if (refinery.YieldRate < refinery.RefineSpeed)
+                            {
+                                var ore = ores.FirstOrDefault();
+                                _logger.LogDebug($"Transferring {ore.Item.Type.SubtypeId} to {refinery.Refinery.CustomName}");
+                                refinery.Refinery.InputInventory.TransferItemFrom(ore.Inventory, ore.Item, (MyFixedPoint)(OreConsumptions.GetOreConsumption(ore.SubType).KgPerSecond * RefineryBuffer));
+                            }
+                            else
+                            {
+                                var ore = ores.LastOrDefault();
+                                _logger.LogDebug($"Transferring {ore.Item.Type.SubtypeId} to {refinery.Refinery.CustomName}");
+                                refinery.Refinery.InputInventory.TransferItemFrom(ore.Inventory, ore.Item, (MyFixedPoint)(OreConsumptions.GetOreConsumption(ore.SubType).KgPerSecond * RefineryBuffer));
+                            }
+                        }
+                    }
+
+                    if (refinery.Refinery.IsProducing)
+                    {
+                        foreach (var statusLight in refinery.StatusLights)
+                        {
+                            statusLight.Color = Color.Green;
+                            statusLight.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        if (refinery.Refinery.IsWorking)
+                        {
+                            foreach (var statusLight in refinery.StatusLights)
+                            {
+                                statusLight.Color = Color.Yellow;
+                                statusLight.Enabled = true;
+                            }
                         }
                         else
                         {
-                            var ore = ores.LastOrDefault();
-                            _logger.LogDebug($"Transferring {ore.Item.Type.SubtypeId} to {refinery.Refinery.CustomName}");
-                            refinery.Refinery.InputInventory.TransferItemFrom(ore.Inventory, ore.Item, (MyFixedPoint)(OreConsumptions.GetOreConsumption(ore.SubType).KgPerSecond * RefineryBuffer));
+                            foreach (var statusLight in refinery.StatusLights)
+                            {
+                                statusLight.Color = Color.Red;
+                                statusLight.Enabled = true;
+                            }
                         }
                     }
                 }
