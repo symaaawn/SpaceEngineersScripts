@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.PowerOverview", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.HydrogenOxygenOverview", "Display.HydrogenOxygenOverview\Display.HydrogenOxygenOverview.csproj", "{AD3B8863-9B82-4BE0-9458-8415D294D000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refinery.OreDistributionSystem", "Refinery.OreDistributor\Refinery.OreDistributionSystem.csproj", "{3CBA8771-2BB7-4043-BD83-C0646A5473EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refinery.OreDistributionSystem", "Refinery.OreDistributionSystem\Refinery.OreDistributionSystem.csproj", "{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +65,10 @@ Global
 		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Debug|x64.Build.0 = Debug|x64
 		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Release|x64.ActiveCfg = Release|x64
 		{AD3B8863-9B82-4BE0-9458-8415D294D000}.Release|x64.Build.0 = Release|x64
-		{3CBA8771-2BB7-4043-BD83-C0646A5473EA}.Debug|x64.ActiveCfg = Debug|x64
-		{3CBA8771-2BB7-4043-BD83-C0646A5473EA}.Debug|x64.Build.0 = Debug|x64
-		{3CBA8771-2BB7-4043-BD83-C0646A5473EA}.Release|x64.ActiveCfg = Release|x64
-		{3CBA8771-2BB7-4043-BD83-C0646A5473EA}.Release|x64.Build.0 = Release|x64
+		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Debug|x64.ActiveCfg = Debug|x64
+		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Debug|x64.Build.0 = Debug|x64
+		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Release|x64.ActiveCfg = Release|x64
+		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,10 +78,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Displays\Common.Displays.projitems*{0f8b231e-84ad-4c7c-8083-9770b385b0d3}*SharedItemsImports = 13
-		Common.Constants\Common.Constants.projitems*{3cba8771-2bb7-4043-bd83-c0646a5473ea}*SharedItemsImports = 5
-		Common.Contracts\Common.Contracts.projitems*{3cba8771-2bb7-4043-bd83-c0646a5473ea}*SharedItemsImports = 5
-		Common.Displays\Common.Displays.projitems*{3cba8771-2bb7-4043-bd83-c0646a5473ea}*SharedItemsImports = 5
-		Common.Logging\Common.Logging.projitems*{3cba8771-2bb7-4043-bd83-c0646a5473ea}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{41b9acb1-e63f-4cc4-867a-33f37dcbf3ce}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
@@ -99,6 +95,10 @@ Global
 		Common.Displays\Common.Displays.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{738c21f1-d19e-4e02-96a4-6214df311a60}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
+		Common.Contracts\Common.Contracts.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
+		Common.Logging\Common.Logging.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{7f4a83ee-3dba-4240-8c0b-155bff5996af}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5

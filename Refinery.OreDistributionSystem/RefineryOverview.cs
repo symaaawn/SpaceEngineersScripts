@@ -28,13 +28,9 @@ namespace IngameScript
 
             public IMyRefinery Refinery { get; set; }
 
-
             public float RefineSpeed { get; set; }
             public float YieldRate { get; set; }
             public float PowerEfficiency { get; set; }
-
-
-            public IMyConveyorSorter InputSorter { get; set; }
 
             #endregion
 
