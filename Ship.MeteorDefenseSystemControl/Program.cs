@@ -35,14 +35,14 @@ namespace IngameScript
     {
         #region constants
 
-        private const string ProgramName = "MeteorDefenseSystemControl";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("MeteorDefenseSystemControl", "0.0.1", LogLevelDc.Debug);
 
         #endregion
 
         #region private fields
 
         private readonly MyCommandLine _commandLine = new MyCommandLine();
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
 
         IMyBroadcastListener _broadcastListenerRegister;

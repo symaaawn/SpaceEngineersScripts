@@ -31,7 +31,7 @@ namespace IngameScript
         {
             #region private fields
 
-            private List<ILogger> _loggerList;
+            private readonly List<ILogger> _loggerList;
             private readonly Dictionary<LogLevelDc, string> _logLevelAbbreviations = new Dictionary<LogLevelDc, string>()
             {
                 { LogLevelDc.Debug,   "DBG" },
@@ -41,14 +41,16 @@ namespace IngameScript
                 { LogLevelDc.Fatal,   "FTL" }
 
             };
+            private readonly ProgramInformationDc _programInformation;
 
             #endregion
 
             #region construction
 
-            public Logger()
+            public Logger(ProgramInformationDc programInformation)
             {
                 _loggerList = new List<ILogger>();
+                _programInformation = programInformation;
             }
 
             #endregion
@@ -57,26 +59,36 @@ namespace IngameScript
 
             public void LogDebug(string message)
             {
+                if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Debug)
+                    return;
                 Log($"[{_logLevelAbbreviations[LogLevelDc.Debug]}] {message}");
             }
 
             public void LogInfo(string message)
             {
+                if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Info)
+                    return;
                 Log($"[{_logLevelAbbreviations[LogLevelDc.Info]}] {message}");
             }
 
             public void LogWarning(string message)
             {
+                if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Warning)
+                    return;
                 Log($"[{_logLevelAbbreviations[LogLevelDc.Warning]}] {message}");
             }
 
             public void LogError(string message)
             {
+                if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Error)
+                    return;
                 Log($"[{_logLevelAbbreviations[LogLevelDc.Error]}] {message}");
             }
 
             public void LogFatal(string message)
             {
+                if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Fatal)
+                    return;
                 Log($"[{_logLevelAbbreviations[LogLevelDc.Fatal]}] {message}");
             }
 

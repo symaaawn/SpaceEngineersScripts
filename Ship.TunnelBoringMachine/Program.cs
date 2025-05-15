@@ -24,7 +24,7 @@ namespace IngameScript
     {
         #region constants
 
-        private const string ProgramName = "MeteorDefenseSystemControl";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("TunnelBoringMachine", "0.0.1", LogLevelDc.Debug);
         private const float PistonMovementSpeed = 0.5F; //0.01F;
         private const float BorerPistonMovementSpeed = 0.5F; //0.001F;
         private const float BorerPistonRetractionSpeed = -0.5F;
@@ -34,7 +34,7 @@ namespace IngameScript
         #region private fields
 
         private readonly MyCommandLine _commandLine = new MyCommandLine();
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
 
         private TunnelBoringMachineModeDc _mode;
@@ -64,6 +64,11 @@ namespace IngameScript
 
         public Program()
         {
+            _logger.AddLogger(new DetailAreaLogger(Echo));
+            _logger.AddLogger(new ProgrammingBlockLogger(Me));
+
+            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+
             StatusLights = new List<IMyLightingBlock>();
             MergeBlocksBack = new List<IMyShipMergeBlock>();
             MergeBlocksFront = new List<IMyShipMergeBlock>();
@@ -75,9 +80,6 @@ namespace IngameScript
             Drills = new List<IMyShipDrill>();
             Welders = new List<IMyShipWelder>();
             Projectors = new List<IMyProjector>();
-
-            _logger.AddLogger(new DetailAreaLogger(Echo));
-            _logger.AddLogger(new ProgrammingBlockLogger(Me));
 
             GridTerminalSystem.GetBlocksOfType(StatusLights, statusLight => MyIni.HasSection(statusLight.CustomData, "status light"));
             GridTerminalSystem.GetBlocksOfType(MergeBlocksBack, mergeBlocksBack => MyIni.HasSection(mergeBlocksBack.CustomData, "merge blocks back"));
@@ -114,8 +116,6 @@ namespace IngameScript
             var rotors = new List<IMyMotorAdvancedStator>();
             GridTerminalSystem.GetBlocksOfType(rotors, rotor => MyIni.HasSection(rotor.CustomData, "rotor"));
             Rotor = rotors.FirstOrDefault();
-
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
             _mode = TunnelBoringMachineModeDc.Forward;
             _state = new TunnelBoringMachineState_ForwardExtending(this);

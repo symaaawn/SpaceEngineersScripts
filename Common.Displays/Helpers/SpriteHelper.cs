@@ -38,7 +38,7 @@ namespace IngameScript
                 sprite = new MySprite
                 {
                     Type = SpriteType.TEXT,
-                    Data = ProgramName,
+                    Data = ProgramInformation.Name,
                     Position = position,
                     RotationOrScale = 0.8f,
                     Color = Color.Gold,

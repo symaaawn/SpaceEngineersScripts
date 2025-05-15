@@ -38,9 +38,11 @@ namespace IngameScript
 
             #region construction
 
-            public BroadcastControllerLogger(IMyBroadcastController broadcastControllerBlock)
+            public BroadcastControllerLogger(Program program)
             {
-                broadcastControllerBlock.Components.TryGet(out _chatBroadcastController);
+                var broadcastControllers = new List<IMyBroadcastController>();
+                program.GridTerminalSystem.GetBlocksOfType(broadcastControllers);
+                broadcastControllers.FirstOrDefault(block => block.IsSameConstructAs(program.Me)).Components.TryGet(out _chatBroadcastController);
                 if (_chatBroadcastController == null)
                 {
                     throw new Exception("Chat broadcast controller not found.");

@@ -33,13 +33,13 @@ namespace IngameScript
     {
         #region constants
 
-        private const string ProgramName = "RelativePositioningSystem";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("RelativePositioningSystem", "0.0.1", LogLevelDc.Debug);
 
         #endregion
 
         #region private fields
 
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
 
         #endregion
 

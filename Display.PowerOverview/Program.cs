@@ -26,14 +26,14 @@ namespace IngameScript
     {
         #region constants
 
-        private const string ProgramName = "PowerOverview";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("PowerOverview", "0.0.1", LogLevelDc.Debug);
         private const int DisplayWidth = 30;
 
         #endregion
 
         #region private fields
 
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
 
         #endregion
@@ -48,6 +48,7 @@ namespace IngameScript
         {
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
+            _logger.AddLogger(new BroadcastControllerLogger(this));
             Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
             var powerProducers = new List<IMyPowerProducer>();

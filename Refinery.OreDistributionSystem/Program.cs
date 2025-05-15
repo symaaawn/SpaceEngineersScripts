@@ -35,14 +35,14 @@ namespace IngameScript
     {        
         #region constants
 
-        private const string ProgramName = "OreDistributionSystem";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("OreDistributionSystem", "0.1.0", LogLevelDc.Debug);
         private const float RefineryBuffer = 5f; // seconds of ore consumption as buffer
 
         #endregion
 
         #region private fields
 
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
 
         #endregion
@@ -58,13 +58,7 @@ namespace IngameScript
         {
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
-
-            var broadcastControllers = new List<IMyBroadcastController>();
-            GridTerminalSystem.GetBlocksOfType(broadcastControllers);
-            if (broadcastControllers.Count > 0)
-            {
-                _logger.AddLogger(new BroadcastControllerLogger(this));
-            }
+            _logger.AddLogger(new BroadcastControllerLogger(this));
 
             Runtime.UpdateFrequency = UpdateFrequency.Update10;
 
