@@ -19,6 +19,7 @@ using VRage.Game.ModAPI.Ingame.Utilities;
 using VRage.Game.ObjectBuilders.Definitions;
 using VRageMath;
 using UpdateType = Sandbox.ModAPI.Ingame.UpdateType;
+using Sandbox.Game.Entities;
 
 namespace IngameScript
 {
@@ -26,13 +27,13 @@ namespace IngameScript
     {
         #region constants
 
-        private const string ProgramName = "InventoryDisplay";
+        private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("InventoryDisplay", "0.0.1", LogLevelDc.Debug);
 
         #endregion
 
         #region private fields
 
-        private readonly Logger _logger = new Logger();
+        private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
 
         #endregion
@@ -45,8 +46,10 @@ namespace IngameScript
 
         public Program()
         {
+            _logger = new Logger(ProgramInformation);
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
+
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
             var displays = new List<IMyTextPanel>();
@@ -57,7 +60,7 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(cargoContainers,
                 cargoContainer => MyIni.HasSection(cargoContainer.CustomData, "inventoryDisplay"));
 
-            var cargoContainerIdDictionary = new Dictionary<string, IMyCargoContainer>();
+            var cargoContainerIdDictionary = new Dictionary<string, List<IMyCargoContainer>>();
 
             foreach (var cargoContainer in cargoContainers)
             {
@@ -69,19 +72,48 @@ namespace IngameScript
                 if (string.IsNullOrEmpty(id))
                     continue;
 
-                var observingDisplays = new List<IMyTextPanel>();
-                foreach (var display in displays)
+                if (!cargoContainerIdDictionary.ContainsKey(id))
                 {
-                    if (display.CustomData.Contains(id))
-                    {
-                        observingDisplays.Add(display);
-                    }
+                    cargoContainerIdDictionary.Add(id, new List<IMyCargoContainer>());
+                    cargoContainerIdDictionary[id].Add(cargoContainer);
                 }
+                else
+                {
+                    cargoContainerIdDictionary[id].Add(cargoContainer);
+                }
+            }
 
-                if (observingDisplays.Count == 0)
+            var observingDisplayIdDictionary = new Dictionary<string, List<IMyTextPanel>>();
+            foreach (var display in displays)
+            {
+                MyIniParseResult result;
+                if (!_ini.TryParse(display.CustomData, out result))
+                    throw new Exception(result.ToString());
+
+                var id = _ini.Get("inventoryDisplay", "inventoryId").ToString();
+                if (string.IsNullOrEmpty(id))
                     continue;
 
-                CargoContainerObservers.Add(new CargoContainerObserver(this, cargoContainer, observingDisplays));
+                if (!observingDisplayIdDictionary.ContainsKey(id))
+                {
+                    observingDisplayIdDictionary.Add(id, new List<IMyTextPanel>());
+                    observingDisplayIdDictionary[id].Add(display);
+                }
+                else
+                {
+                    observingDisplayIdDictionary[id].Add(display);
+                }
+            }
+
+            foreach (var observingDisplay in observingDisplayIdDictionary)
+            {
+                if (!cargoContainerIdDictionary.ContainsKey(observingDisplay.Key))
+                {
+                    _logger.LogInfo($"No cargo container found for display {observingDisplay.Key}");
+                    continue;
+                }
+
+                CargoContainerObservers.Add(new CargoContainerObserver(this, cargoContainerIdDictionary[observingDisplay.Key], observingDisplay.Value));
             }
         }
 
@@ -127,20 +159,20 @@ namespace IngameScript
             #region properties
 
             public string Id { get; private set; }
-            public IMyCargoContainer Container { get; private set; }
+            public List<IMyCargoContainer> Container { get; private set; }
             public List<StorageInventoryDisplay> Displays { get; private set; } = new List<StorageInventoryDisplay>();
 
             #endregion
 
             #region construction
 
-            public CargoContainerObserver(Program program, IMyCargoContainer container, List<IMyTextPanel> displays)
+            public CargoContainerObserver(Program program, List<IMyCargoContainer> container, List<IMyTextPanel> displays)
             {
                 _program = program;
                 Container = container;
                 Id = _ini.Get("inventoryDisplay", "inventoryId").ToString();
                 Displays.AddList(displays.Select(d => new StorageInventoryDisplay(d)).ToList());
-                _program._logger.LogInfo($"Found {displays.Count} displays for cargo container {container.CustomName}");
+                _program._logger.LogInfo($"Found {displays.Count} displays for cargo containers {container.Select(c => c.CustomName)}");
             }
 
             #endregion
@@ -148,9 +180,17 @@ namespace IngameScript
             public void UpdateDisplays()
             {
                 var items = new List<MyInventoryItem>();
-                var inventory = Container.GetInventory();
-                inventory.GetItems(items);
-                var inventoryCapacity = $"{inventory.CurrentVolume.ToString():N3} / {inventory.MaxVolume.ToString():N3}";
+                var inventories = Container.Select(c => c.GetInventory());
+                foreach (var inventory in inventories)
+                {
+                    var inventoryItems = new List<MyInventoryItem>();
+                    inventory.GetItems(inventoryItems);
+                    _program._logger.LogInfo($"Found {inventoryItems.Count} items in inventory {inventory.Owner.DisplayName}");
+                    items.AddRange(inventoryItems);
+                }
+                var currentVolume = inventories.Sum(i => i.CurrentVolume.ToIntSafe());
+                var maxVolume = inventories.Sum(i => i.MaxVolume.ToIntSafe());
+                var inventoryCapacity = $"{currentVolume.ToString():N3} / {maxVolume.ToString():N3}";
                 var itemList = new List<string>
                 {
                     $"Inventory: {inventoryCapacity}"
@@ -159,7 +199,7 @@ namespace IngameScript
                 itemList.AddRange(ContainedItemString(items));
                 foreach (var display in Displays)
                 {
-                    display.RenderDisplay(inventory.CurrentVolume.ToIntSafe(), inventory.MaxVolume.ToIntSafe(), itemList.ToArray());
+                    display.RenderDisplay(currentVolume, maxVolume, itemList.ToArray());
                 }
             }
         }

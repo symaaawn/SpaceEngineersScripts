@@ -85,8 +85,6 @@ namespace IngameScript
                 var titleSprite = SpriteHelper.DrawTitle(Position);
                 
                 Frame.AddRange(titleSprite);
-
-                Position += new Vector2(0, 30);
             }
         }
     }
