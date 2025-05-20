@@ -37,7 +37,7 @@ namespace IngameScript
         #region constants
 
         private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("OreDistributionSystem", "0.1.0", LogLevelDc.Debug);
-        private const float RefineryBuffer = 5f; // seconds of ore consumption as buffer
+        private const float RefineryBuffer = 25f; // seconds of ore consumption as buffer
 
         #endregion
 
@@ -52,6 +52,8 @@ namespace IngameScript
 
         public List<RefineryOverview> Refineries { get; set; } = new List<RefineryOverview>();
         public List<IMyInventory> SourceInventories { get; set; } = new List<IMyInventory>();
+        public List<IMyInventory> TargetInventories { get; set; } = new List<IMyInventory>();
+        public List<IMyLightingBlock> SystemStatusLights { get; set; } = new List<IMyLightingBlock> { };
 
         #endregion
 
@@ -66,21 +68,42 @@ namespace IngameScript
             MyIniParseResult result;
 
             var refineries = new List<IMyRefinery>();
-            GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, "oreDistributionSystem"));
+            GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, OreDistributionSystem));
             foreach (var refinery in refineries)
             {
                 Refineries.Add(new RefineryOverview(refinery));
             }
 
-            var sourceContainers = new List<IMyCargoContainer>();
-            GridTerminalSystem.GetBlocksOfType(sourceContainers, container => MyIni.HasSection(container.CustomData, "oreDistributionSystem"));
-            foreach (var sourceContainer in sourceContainers)
+            var containers = new List<IMyCargoContainer>();
+            GridTerminalSystem.GetBlocksOfType(containers, container => MyIni.HasSection(container.CustomData, OreDistributionSystem));
+            foreach (var container in containers)
             {
-                if (sourceContainer.HasInventory)
+                if (container.HasInventory)
                 {
-                    var inventory = sourceContainer.GetInventory(0);
-                    SourceInventories.Add(inventory);
-                    _logger.LogDebug($"Found source container {sourceContainer.CustomName}");
+                    if (!_ini.TryParse(container.CustomData, out result))
+                        throw new Exception(result.ToString());
+
+                    var containerType = _ini.Get(OreDistributionSystem, "containerType").ToInt32();
+                    switch (containerType)
+                    {
+                        case (int)ContainerTypeDc.Ores:
+                            var inventory = container.GetInventory(0);
+                            SourceInventories.Add(inventory);
+                            _logger.LogDebug($"Found target container {container.CustomName}");
+                            break;
+
+                        case (int)ContainerTypeDc.Ingots:
+                            var targetInventory = container.GetInventory(0);
+                            TargetInventories.Add(targetInventory);
+                            _logger.LogDebug($"Found target container {container.CustomName}");
+                            break;
+
+                        default:
+                            _logger.LogWarning($"Unknown container type for {container.CustomName}");
+                            continue;
+                    }
+
+                    
                 }
             }
 
@@ -91,18 +114,21 @@ namespace IngameScript
             }
 
             var statusLights = new List<IMyLightingBlock>();
-            GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, "oreDistributionSystem"));
+            GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, OreDistributionSystem));
             foreach (var statusLight in statusLights)
             {
                 if (!_ini.TryParse(statusLight.CustomData, out result))
                     throw new Exception(result.ToString());
 
-                var id = _ini.Get("oreDistributionSystem", "machineName").ToString();
-                if (string.IsNullOrEmpty(id))
+                var machineName = _ini.Get(OreDistributionSystem, "machineName").ToString();
+                if (string.IsNullOrEmpty(machineName))
+                {
+                    SystemStatusLights.Add(statusLight);
                     continue;
-                _logger.LogDebug($"Found status light {statusLight.CustomName} for {id}");
+                }
+                _logger.LogDebug($"Found status light {statusLight.CustomName} for {machineName}");
 
-                Refineries.FirstOrDefault(r => r.Refinery.CustomName.Contains(id))?.StatusLights.Add(statusLight);
+                Refineries.FirstOrDefault(r => r.Refinery.CustomName.Contains(machineName))?.StatusLights.Add(statusLight);
             }
         }
 
@@ -120,7 +146,7 @@ namespace IngameScript
                 {
                     var items = new List<MyInventoryItem>();
                     sourceInventory.GetItems(items);
-                    foreach (var item in items)
+                    foreach (var item in items.Where(i => !i.Type.SubtypeId.Equals("Ice")))
                     {
                         ores.Add(new InventoryItem(item, sourceInventory));
                     }
@@ -178,6 +204,24 @@ namespace IngameScript
                         }
                     }
                 }
+
+                SetSystemStatusLights();
+            }
+        }
+
+        public void SetSystemStatusLights()
+        {
+            if (Refineries.All(r => r.Refinery.IsProducing))
+            {
+                SystemStatusLights.ForEach(l => l.Color = Color.Green);
+            }
+            else if (Refineries.All(r => r.Refinery.IsWorking))
+            {
+                SystemStatusLights.ForEach(l => l.Color = Color.Yellow);
+            }
+            else
+            {
+                SystemStatusLights.ForEach(l => l.Color = Color.Red);
             }
         }
     }

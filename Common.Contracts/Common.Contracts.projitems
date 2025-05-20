@@ -9,6 +9,7 @@
     <Import_RootNamespace>IngameScript</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ContainerTypeDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IgcTagDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogLevelDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MeteorDefenseSystemStateDc.cs" />
