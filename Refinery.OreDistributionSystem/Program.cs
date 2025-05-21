@@ -51,8 +51,11 @@ namespace IngameScript
         #region properties
 
         public List<RefineryOverview> Refineries { get; set; } = new List<RefineryOverview>();
+        public List<IMyAssembler> Assemblers { get; set; } = new List<IMyAssembler>();
+
         public List<IMyInventory> SourceInventories { get; set; } = new List<IMyInventory>();
         public List<IMyInventory> TargetInventories { get; set; } = new List<IMyInventory>();
+
         public List<IMyLightingBlock> SystemStatusLights { get; set; } = new List<IMyLightingBlock> { };
 
         #endregion
@@ -73,6 +76,14 @@ namespace IngameScript
             {
                 Refineries.Add(new RefineryOverview(refinery));
             }
+
+            var assemblers = new List<IMyAssembler>();
+            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => MyIni.HasSection(assembler.CustomData, OreDistributionSystem));
+            foreach (var assembler in assemblers)
+            {
+                Assemblers.Add(assembler);
+            }
+            _logger.LogDebug($"Found {Assemblers.Count} assemblers");
 
             var containers = new List<IMyCargoContainer>();
             GridTerminalSystem.GetBlocksOfType(containers, container => MyIni.HasSection(container.CustomData, OreDistributionSystem));
@@ -141,6 +152,35 @@ namespace IngameScript
         {
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
+                var ingots = new List<MyInventoryItem>();
+                foreach (var targetInventory in TargetInventories)
+                {
+                    var items = new List<MyInventoryItem>();
+                    targetInventory.GetItems(items);
+                    ingots.AddRange(items);
+                }
+
+                var rushOres = new List<string>();
+                foreach (var assembler in Assemblers)
+                {
+                    var assemblerQueue = new List<MyProductionItem>();
+                    assembler.GetQueue(assemblerQueue);
+                    foreach (var item in assemblerQueue)
+                    {
+                        var recipe = GetRecipe(item.BlueprintId.SubtypeName);
+                        foreach (var ingotNeed in recipe.GetMaterials())
+                        {
+                            var amountNeeded = ingotNeed.Value * ((double)item.Amount);
+                            var ingot = ingots.FirstOrDefault(i => i.Type.SubtypeId == ingotNeed.Key);
+                            if (ingot == null || (ingot != null && (double)ingot.Amount < amountNeeded))
+                            {
+                                rushOres.Add(ingotNeed.Key);
+                                _logger.LogDebug($"Assembler {assembler.CustomName} needs {amountNeeded} of {ingotNeed.Key} but only has {ingot.Amount}");
+                            }
+                        }
+                    }
+                }
+
                 var ores = new List<InventoryItem>();
                 foreach (var sourceInventory in SourceInventories)
                 {
@@ -163,7 +203,7 @@ namespace IngameScript
                         {
                             if (refinery.YieldRate < refinery.RefineSpeed)
                             {
-                                var ore = ores.FirstOrDefault();
+                                InventoryItem ore = ores.FirstOrDefault(o => o.SubType == rushOres.FirstOrDefault()) ?? ores.FirstOrDefault();
                                 _logger.LogDebug($"Transferring {ore.Item.Type.SubtypeId} to {refinery.Refinery.CustomName}");
                                 refinery.Refinery.InputInventory.TransferItemFrom(ore.Inventory, ore.Item, (MyFixedPoint)(OreConsumptions.GetOreConsumption(ore.SubType).KgPerSecond * RefineryBuffer));
                             }
@@ -175,37 +215,41 @@ namespace IngameScript
                             }
                         }
                     }
-
-                    if (refinery.Refinery.IsProducing)
-                    {
-                        foreach (var statusLight in refinery.StatusLights)
-                        {
-                            statusLight.Color = Color.Green;
-                            statusLight.Enabled = true;
-                        }
-                    }
-                    else
-                    {
-                        if (refinery.Refinery.IsWorking)
-                        {
-                            foreach (var statusLight in refinery.StatusLights)
-                            {
-                                statusLight.Color = Color.Yellow;
-                                statusLight.Enabled = true;
-                            }
-                        }
-                        else
-                        {
-                            foreach (var statusLight in refinery.StatusLights)
-                            {
-                                statusLight.Color = Color.Red;
-                                statusLight.Enabled = true;
-                            }
-                        }
-                    }
                 }
 
+                SetStatusLights();
+
                 SetSystemStatusLights();
+            }
+        }
+
+        public void SetStatusLights()
+        {
+            foreach (var refinery in Refineries){
+                if (refinery.Refinery.IsProducing)
+                {
+                    foreach (var statusLight in refinery.StatusLights)
+                    {
+                        statusLight.Color = Color.Green;
+                        statusLight.Enabled = true;
+                    }
+                }
+                else if (refinery.Refinery.IsWorking)
+                {
+                    foreach (var statusLight in refinery.StatusLights)
+                    {
+                        statusLight.Color = Color.Yellow;
+                        statusLight.Enabled = true;
+                    }
+                }
+                else
+                {
+                    foreach (var statusLight in refinery.StatusLights)
+                    {
+                        statusLight.Color = Color.Red;
+                        statusLight.Enabled = true;
+                    }
+                }
             }
         }
 
@@ -213,15 +257,27 @@ namespace IngameScript
         {
             if (Refineries.All(r => r.Refinery.IsProducing))
             {
-                SystemStatusLights.ForEach(l => l.Color = Color.Green);
+                foreach (var statusLight in SystemStatusLights)
+                {
+                    statusLight.Color = Color.Green;
+                    statusLight.Enabled = true;
+                }
             }
             else if (Refineries.All(r => r.Refinery.IsWorking))
             {
-                SystemStatusLights.ForEach(l => l.Color = Color.Yellow);
+                foreach (var statusLight in SystemStatusLights)
+                {
+                    statusLight.Color = Color.Yellow;
+                    statusLight.Enabled = true;
+                }
             }
             else
             {
-                SystemStatusLights.ForEach(l => l.Color = Color.Red);
+                foreach (var statusLight in SystemStatusLights)
+                {
+                    statusLight.Color = Color.Red;
+                    statusLight.Enabled = true;
+                }
             }
         }
     }

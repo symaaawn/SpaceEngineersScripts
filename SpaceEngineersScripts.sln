@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.PowerOverview", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refinery.OreDistributionSystem", "Refinery.OreDistributionSystem\Refinery.OreDistributionSystem.csproj", "{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Recipes", "Common.Recipes\Common.Recipes.shproj", "{C1B64D74-3914-4DAE-9F1A-FC3C333C4D3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -93,6 +95,7 @@ Global
 		Common.Contracts\Common.Contracts.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
+		Common.Recipes\Common.Recipes.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{7f4a83ee-3dba-4240-8c0b-155bff5996af}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
@@ -100,6 +103,7 @@ Global
 		Common.Logging\Common.Logging.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{8a3cdcc5-4b55-4d87-a415-698a0e1ff06f}*SharedItemsImports = 13
+		Common.Recipes\Common.Recipes.projitems*{c1b64d74-3914-4dae-9f1a-fc3c333c4d3a}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5

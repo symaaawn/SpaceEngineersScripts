@@ -27,4 +27,5 @@
   <Import Project="..\Common.Contracts\Common.Contracts.projitems" Label="Shared" />
   <Import Project="..\Common.Logging\Common.Logging.projitems" Label="Shared" />
   <Import Project="..\Common.Displays\Common.Displays.projitems" Label="Shared" />
+  <Import Project="..\Common.Recipes\Common.Recipes.projitems" Label="Shared" />
 </Project>
