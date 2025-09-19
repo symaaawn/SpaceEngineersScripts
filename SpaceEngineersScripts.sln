@@ -29,6 +29,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display.PowerOverview", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refinery.OreDistributionSystem", "Refinery.OreDistributionSystem\Refinery.OreDistributionSystem.csproj", "{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ship.RelativePositioningSystemService", "Ship.RelativePositioningSystemService\Ship.RelativePositioningSystemService.csproj", "{8E4B14D6-22AC-47B9-AA33-77BACFF3083F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.IgcMessageBase", "Common.IgcMessageBase\Common.IgcMessageBase.shproj", "{E7E822A9-6B80-4282-BF20-B1C4A7D9970F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Configuration", "Common.Configuration\Common.Configuration.shproj", "{3C9084DC-4841-4F25-9E5C-C320DA9C95F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester.IgcTester", "Tester.IgcTester\Tester.IgcTester.csproj", "{1847646A-A170-49AC-AC66-F2114A23F221}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.RelativePositioningSystemService.Contracts", "Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.shproj", "{B4DEF387-721E-4B3E-9566-946EA649B725}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,6 +73,14 @@ Global
 		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Debug|x64.Build.0 = Debug|x64
 		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Release|x64.ActiveCfg = Release|x64
 		{7F0A49AD-0F83-A49E-A049-4FDDA257F3BE}.Release|x64.Build.0 = Release|x64
+		{8E4B14D6-22AC-47B9-AA33-77BACFF3083F}.Debug|x64.ActiveCfg = Debug|x64
+		{8E4B14D6-22AC-47B9-AA33-77BACFF3083F}.Debug|x64.Build.0 = Debug|x64
+		{8E4B14D6-22AC-47B9-AA33-77BACFF3083F}.Release|x64.ActiveCfg = Release|x64
+		{8E4B14D6-22AC-47B9-AA33-77BACFF3083F}.Release|x64.Build.0 = Release|x64
+		{1847646A-A170-49AC-AC66-F2114A23F221}.Debug|x64.ActiveCfg = Debug|x64
+		{1847646A-A170-49AC-AC66-F2114A23F221}.Debug|x64.Build.0 = Debug|x64
+		{1847646A-A170-49AC-AC66-F2114A23F221}.Release|x64.ActiveCfg = Release|x64
+		{1847646A-A170-49AC-AC66-F2114A23F221}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +90,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Displays\Common.Displays.projitems*{0f8b231e-84ad-4c7c-8083-9770b385b0d3}*SharedItemsImports = 13
+		Common.Configuration\Common.Configuration.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Contracts\Common.Contracts.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Logging\Common.Logging.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Configuration\Common.Configuration.projitems*{3c9084dc-4841-4f25-9e5c-c320da9c95f1}*SharedItemsImports = 13
 		Common.Utilities\Common.Utilities.projitems*{41b9acb1-e63f-4cc4-867a-33f37dcbf3ce}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{47f6dfe7-9f9a-4c7c-b3e1-c915499174cb}*SharedItemsImports = 5
@@ -100,11 +126,20 @@ Global
 		Common.Logging\Common.Logging.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{8a3cdcc5-4b55-4d87-a415-698a0e1ff06f}*SharedItemsImports = 13
+		Common.Configuration\Common.Configuration.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Contracts\Common.Contracts.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Logging\Common.Logging.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{b4def387-721e-4b3e-9566-946ea649b725}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
+		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{e7e822a9-6b80-4282-bf20-b1c4a7d9970f}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{ec6abdc0-ca79-4368-9c3e-c31f13250d75}*SharedItemsImports = 5
