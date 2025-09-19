@@ -10,6 +10,7 @@
             public const string RpsMessage = "RpsMessage";
             public const string MeteorDefenseSystemRegister = "MeteorDefenseSystemRegister";
             public const string MeteorDefenseSystemMessage = "MeteorDefenseSystemMessage";
+            public const string InventoryServiceRequest = "inventoryService/Request";
             public const string RelativePositioningSystemServiceMessage = "RelativePositioningSystemServiceMessage";
         }
     }
