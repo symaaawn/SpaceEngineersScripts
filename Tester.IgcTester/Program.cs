@@ -72,7 +72,7 @@ namespace IngameScript
                             {
                                 var updateMessage = (RelativePositioningSystemServiceMessage_Update)message;
                                 _logger.LogInfo($"Received message {updateMessage.Method} with id {updateMessage.RequestId}");
-                                _logger.LogInfo($"Position X: {updateMessage.ReferenceCoordinates.X} - Y: {updateMessage.ReferenceCoordinates.Y} - Z: {updateMessage.ReferenceCoordinates.Z}");
+                                _logger.LogInfo($"Matrix: {updateMessage.ReferenceMatrix}");
                             }
                         }
                         else // if(msg.Data is XXX)

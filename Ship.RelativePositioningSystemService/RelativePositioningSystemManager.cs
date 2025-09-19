@@ -66,7 +66,7 @@ namespace IngameScript
 
             private void BroadcastPosition() 
             {
-                _relativePositioningSystemClient.SendPosition(_referencePoint.GetPosition());
+                _relativePositioningSystemClient.SendPosition(_referencePoint.WorldMatrix);
             }
 
             #endregion

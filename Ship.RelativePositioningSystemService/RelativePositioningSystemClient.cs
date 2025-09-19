@@ -38,17 +38,18 @@ namespace IngameScript
 
             #region public methods
 
-            public void SendPosition(Vector3D position)
+            public void SendPosition(MatrixD position)
             {
                 var message = new RelativePositioningSystemServiceMessage_Update()
                 {
                     RequestId = ++_messageCount,
                     Method = "Update",
-                    ReferenceCoordinates = position
+                    ReferenceMatrix = position
                 };
                 _igc.SendBroadcastMessage(_broadcastTag, message.Serialize());
                 _logger.LogInfo($"Sending position to tag {_broadcastTag}");
-                _logger.LogInfo($"Broadcasting position X: {position.X} - Y: {position.Y} - Z: {position.Z}");
+                _logger.LogInfo($"Message ID: {message.RequestId}");
+                _logger.LogInfo($"Position: {position}");
             }
 
             #endregion

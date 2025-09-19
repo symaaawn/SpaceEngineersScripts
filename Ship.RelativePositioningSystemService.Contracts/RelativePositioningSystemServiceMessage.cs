@@ -36,10 +36,11 @@ namespace IngameScript
                         {
                             RequestId = RequestId,
                             Method = Method,
-                            ReferenceCoordinates = new Vector3D(
-                                double.Parse(raw["ReferenceCoordinates.X"]),
-                                double.Parse(raw["ReferenceCoordinates.Y"]),
-                                double.Parse(raw["ReferenceCoordinates.Z"])
+                            ReferenceMatrix = new MatrixD(
+                                double.Parse(raw["ReferenceCoordinates.M11"]), double.Parse(raw["ReferenceCoordinates.M12"]), double.Parse(raw["ReferenceCoordinates.M13"]), double.Parse(raw["ReferenceCoordinates.M14"]),
+                                double.Parse(raw["ReferenceCoordinates.M21"]), double.Parse(raw["ReferenceCoordinates.M22"]), double.Parse(raw["ReferenceCoordinates.M23"]), double.Parse(raw["ReferenceCoordinates.M24"]),
+                                double.Parse(raw["ReferenceCoordinates.M31"]), double.Parse(raw["ReferenceCoordinates.M32"]), double.Parse(raw["ReferenceCoordinates.M33"]), double.Parse(raw["ReferenceCoordinates.M34"]),
+                                double.Parse(raw["ReferenceCoordinates.M41"]), double.Parse(raw["ReferenceCoordinates.M42"]), double.Parse(raw["ReferenceCoordinates.M43"]), double.Parse(raw["ReferenceCoordinates.M44"])
                             )
                         };
                     default:
