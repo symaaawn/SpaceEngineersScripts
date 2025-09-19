@@ -20,6 +20,8 @@ namespace IngameScript
             private List<IMyLightingBlock> _statusLights;
             private IMyRemoteControl _referencePoint;
 
+            private ServiceStateDc State { get; set; } = ServiceStateDc.Active;
+
             #endregion
 
             #region construction
@@ -40,12 +42,27 @@ namespace IngameScript
 
             public void Update()
             {
+                UpdateStatus();
                 BroadcastPosition();
             }
 
             #endregion
 
             #region private methods
+
+            private void UpdateStatus()
+            {
+                if (_referencePoint == null || !_referencePoint.IsWorking)
+                {
+                    State = ServiceStateDc.Error;
+                    _logger.LogError("No reference point defined");
+                }
+                else
+                {
+                    State = ServiceStateDc.Active;
+                }
+                _relativePositioningSystemActions.UpdateStatusLights(_statusLights, State);
+            }
 
             private void BroadcastPosition() 
             {

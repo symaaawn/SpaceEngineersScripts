@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IgcTagDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogLevelDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MeteorDefenseSystemStateDc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceStateDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TunnelBoringMachineModeDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TunnelBoringMachineStateDc.cs" />
   </ItemGroup>
