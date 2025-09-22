@@ -23,9 +23,15 @@
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ship.RelativePositioningSystemService\Ship.RelativePositioningSystemService.csproj" />
+  </ItemGroup>
   <Import Project="..\Common.Logging\Common.Logging.projitems" Label="Shared" />
   <Import Project="..\Common.Contracts\Common.Contracts.projitems" Label="Shared" />
   <Import Project="..\Common.Displays\Common.Displays.projitems" Label="Shared" />
   <Import Project="..\Common.Constants\Common.Constants.projitems" Label="Shared" />
   <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
+  <Import Project="..\Common.Configuration\Common.Configuration.projitems" Label="Shared" />
+  <Import Project="..\Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems" Label="Shared" />
+  <Import Project="..\Common.IgcMessageBase\Common.IgcMessageBase.projitems" Label="Shared" />
 </Project>

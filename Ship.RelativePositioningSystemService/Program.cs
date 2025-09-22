@@ -34,7 +34,7 @@ namespace IngameScript
         private readonly MyCommandLine _commandLine = new MyCommandLine();
         private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
-        private readonly ProgrammingBlockConfiguration _programmingBlockConfiguration;
+        private readonly BaseConfiguration _relativePositioningSystemConfiguration;
 
         private readonly RelativePositioningSystemManager _relativePositioningSystemManager;
         private readonly RelativePositioningSystemActions _relativePositioningSystemActions;
@@ -44,7 +44,7 @@ namespace IngameScript
 
         public Program()
         {
-            _programmingBlockConfiguration = new ProgrammingBlockConfiguration(Me, _ini);
+            _relativePositioningSystemConfiguration = new BaseConfiguration(Me, _ini);
 
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
@@ -60,7 +60,7 @@ namespace IngameScript
                 _logger.LogFatal("Could not find reference control");
             }
 
-            _relativePositioningSystemClient = new RelativePositioningSystemClient(_logger, _programmingBlockConfiguration, IGC);
+            _relativePositioningSystemClient = new RelativePositioningSystemClient(_logger, _relativePositioningSystemConfiguration, IGC);
             _relativePositioningSystemActions = new RelativePositioningSystemActions(_logger);
             _relativePositioningSystemManager = new RelativePositioningSystemManager(_logger, _relativePositioningSystemActions, _relativePositioningSystemClient, statusLights, referenceControl);
 

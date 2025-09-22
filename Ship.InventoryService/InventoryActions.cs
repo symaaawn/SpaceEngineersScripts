@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sandbox.ModAPI.Ingame;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,19 +17,63 @@ namespace IngameScript
             #region private fields
 
             private readonly Logger _logger;
+            private readonly IMyGridTerminalSystem _gridTerminalSystem;
 
             #endregion
 
             #region construction
 
-            public InventoryActions(Logger logger)
+            public InventoryActions(Logger logger, IMyGridTerminalSystem myGridTerminalSystem)
             {
                 _logger = logger;
+                _gridTerminalSystem = myGridTerminalSystem;
             }
 
             #endregion
 
             #region methods
+
+            public IMyInventory GetTargetInventory(string productionBlockName)
+            {
+                var productionBlock = _gridTerminalSystem.GetBlockWithName(productionBlockName);
+
+                if (productionBlock == null)
+                {
+                    _logger.LogError($"Production block with name {productionBlockName} not found.");
+                    return null;
+                }
+
+                if (productionBlock is IMyProductionBlock)
+                {
+                    var prodBlock = productionBlock as IMyProductionBlock;
+                    return prodBlock.InputInventory;
+                }
+                else
+                {
+                    _logger.LogError($"Block with name {productionBlockName} is not a production block.");
+                    return null;
+                }
+            }
+
+            public IMyInventory GetSourceInventory(string productionBlockName)
+            {
+                var productionBlock = _gridTerminalSystem.GetBlockWithName(productionBlockName);
+                if (productionBlock == null)
+                {
+                    _logger.LogError($"Production block with name {productionBlockName} not found.");
+                    return null;
+                }
+                if (productionBlock is IMyProductionBlock)
+                {
+                    var prodBlock = productionBlock as IMyProductionBlock;
+                    return prodBlock.OutputInventory;
+                }
+                else
+                {
+                    _logger.LogError($"Block with name {productionBlockName} is not a production block.");
+                    return null;
+                }
+            }
 
             public bool TransferItems(IMyInventory sourceInventory, IMyInventory targetInventory, MyItemType itemType, MyFixedPoint amount)
             {

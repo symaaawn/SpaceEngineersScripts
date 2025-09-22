@@ -41,6 +41,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.RelativePositioningSys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ship.InventoryService", "Ship.InventoryService\Ship.InventoryService.csproj", "{AB043293-38AF-4F47-8301-059F4DC39DA6}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.InventoryService.Contracts", "Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.shproj", "{CC301D45-24DC-4EC3-99E7-A1013CFF0B94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -139,12 +141,16 @@ Global
 		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Configuration\Common.Configuration.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
+		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
+		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{b4def387-721e-4b3e-9566-946ea649b725}*SharedItemsImports = 13
+		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{cc301d45-24dc-4ec3-99e7-a1013cff0b94}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5

@@ -11,7 +11,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class IgcTesterConfiguration : ProgrammingBlockConfiguration
+        public class IgcTesterConfiguration : BaseConfiguration
         {
             #region constants
 
@@ -28,12 +28,12 @@ namespace IngameScript
 
             #region constructors
 
-            public IgcTesterConfiguration(IMyProgrammableBlock programmableBlock, MyIni ini)
-                : base(programmableBlock, ini)
+            public IgcTesterConfiguration(IMyTerminalBlock terminalBlock, MyIni ini)
+                : base(terminalBlock, ini)
             {
                 MyIniParseResult result;
 
-                if (!ini.TryParse(programmableBlock.CustomData, out result))
+                if (!ini.TryParse(terminalBlock.CustomData, out result))
                     throw new Exception(result.ToString());
 
                 ListenerTag = ShipId + "/" + ini.Get(_igcTesterConfigurationSection, _listenerTagKey).ToString();

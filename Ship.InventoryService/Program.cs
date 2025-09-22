@@ -33,7 +33,7 @@ namespace IngameScript
         #region constants
 
         private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("InventoryService", "0.1.0", LogLevelDc.Debug);
-        private const string InventoryServiceTag = "inventoryService";
+        private const string InventoryServiceTag = "InventoryService";
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace IngameScript
             var cargoContainers = new List<IMyCargoContainer>();
             GridTerminalSystem.GetBlocksOfType(cargoContainers, container => MyIni.HasSection(container.CustomData, InventoryServiceTag));
 
-            _inventoryActions = new InventoryActions(_logger);
+            _inventoryActions = new InventoryActions(_logger, GridTerminalSystem);
 
             _inventoryManager = new InventoryManager(_logger, _inventoryActions, cargoContainers);
 

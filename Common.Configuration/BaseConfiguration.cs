@@ -22,7 +22,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class ProgrammingBlockConfiguration
+        public class BaseConfiguration
         {
             #region constants
 
@@ -39,10 +39,10 @@ namespace IngameScript
 
             #region constructors
 
-            public ProgrammingBlockConfiguration(IMyProgrammableBlock programmableBlock, MyIni ini)
+            public BaseConfiguration(IMyTerminalBlock terminalBlock, MyIni ini)
             {
                 MyIniParseResult result;
-                if (!ini.TryParse(programmableBlock.CustomData, out result))
+                if (!ini.TryParse(terminalBlock.CustomData, out result))
                     throw new Exception(result.ToString());
 
                 ShipId = ini.Get(_baseServiceConfigurationSection, _shipIdKey).ToString();

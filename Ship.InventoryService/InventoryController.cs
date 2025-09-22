@@ -1,6 +1,7 @@
 ﻿using Sandbox.ModAPI.Ingame;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,18 +38,53 @@ namespace IngameScript
             {
                 while (_igcListener.HasPendingMessage)
                 {
-                    var message = _igcListener.AcceptMessage();
-                    if (message.Tag == IgcTagDc.InventoryServiceRequest)
+                    var rawMessage = _igcListener.AcceptMessage();
+                    if (rawMessage.Tag == IgcTagDc.InventoryServiceRequest)
                     {
-                        HandleRequest(message);
+                        HandleRequest(rawMessage);
                     }
                 }
             }
 
-            public void HandleRequest(MyIGCMessage message)
+            public void HandleRequest(MyIGCMessage rawMessage)
             {
-                var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                var parts = message.Data.ToString().Split(';');
+                if(rawMessage.Data is ImmutableDictionary<string, string>)
+                {
+                    var message = new InventoryServiceMessage().Deserialize((ImmutableDictionary<string, string>)rawMessage.Data);
+
+                    switch (message.Method)
+                    {
+                        case "PullItems":
+                            var pullMessage = message as InventoryServiceMessage_PullItems;
+                            if(pullMessage != null)
+                            {
+                                _inventoryManager.PullItems(pullMessage);
+                            }
+                            else
+                            {
+                                _logger.LogError("Invalid PullItems message");
+                            }
+                            break;
+                        case "PushItems":
+                            var pushMessage = message as InventoryServiceMessage_PushItems;
+                            if(pushMessage != null)
+                            {
+                                _inventoryManager.PushItems(pushMessage);
+                            }
+                            else
+                            {
+                                _logger.LogError("Invalid PushItems message");
+                            }
+                            break;
+                        default:
+                            _logger.LogError($"Unknown method: {message.Method}");
+                            break;
+                    }
+                }
+                else
+                {
+                    _logger.LogError("Invalid message data");
+                }
             }
 
             #endregion
