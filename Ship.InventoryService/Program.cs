@@ -41,11 +41,10 @@ namespace IngameScript
 
         private readonly Logger _logger = new Logger(ProgramInformation);
         private readonly MyIni _ini = new MyIni();
+        private readonly InventoryServiceConfiguration _inventoryServiceConfiguration;
 
         private readonly InventoryManager _inventoryManager;
-
         private readonly InventoryActions _inventoryActions;
-
         private readonly InventoryController _inventoryController;
 
         #endregion
@@ -56,20 +55,36 @@ namespace IngameScript
 
         public Program()
         {
+            _inventoryServiceConfiguration = new InventoryServiceConfiguration(Me, _ini);
+
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
             _logger.AddLogger(new BroadcastControllerLogger(this));
 
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            _logger.LogDebug("Starting InventoryService");
+
+            Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
             var cargoContainers = new List<IMyCargoContainer>();
             GridTerminalSystem.GetBlocksOfType(cargoContainers, container => MyIni.HasSection(container.CustomData, InventoryServiceTag));
+            if (cargoContainers.Count == 0)
+            {
+                _logger.LogFatal($"No cargo containers with tag '{InventoryServiceTag}' found.");
+            }
+            else 
+            {
+                _logger.LogInfo($"Found {cargoContainers.Count} cargo containers with tag '{InventoryServiceTag}'.");
+            }
 
             _inventoryActions = new InventoryActions(_logger, GridTerminalSystem);
+            _logger.LogDebug("Initialized InventoryActions");
 
             _inventoryManager = new InventoryManager(_logger, _inventoryActions, cargoContainers);
+            _logger.LogDebug("Initialized InventoryManager");
 
-            _inventoryController = new InventoryController(_logger, _inventoryManager, IGC);
+            _inventoryController = new InventoryController(_logger, _inventoryServiceConfiguration, _inventoryManager, IGC);
+            _logger.LogDebug("Initialized InventoryController");
+
         }
 
         public void Save()
@@ -80,11 +95,13 @@ namespace IngameScript
         {
             if ((updateType & UpdateType.IGC) != 0)
             {
+                _logger.LogInfo("Processing IGC messages");
                 _inventoryController.Update();
             }
 
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
+                _logger.LogInfo("Processing inventory updates");
                 _inventoryManager.Update();
             }
         }

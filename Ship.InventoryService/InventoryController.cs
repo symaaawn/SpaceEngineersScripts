@@ -12,22 +12,34 @@ namespace IngameScript
     {
         public class InventoryController
         {
+            #region constants
+
+            #endregion
+
             #region private fields
 
+            private readonly string _inventoryRequestTag = IgcTagDc.InventoryService + "/" + IgcTagDc.Request;
+            private readonly string _inventoryResponseTag = IgcTagDc.InventoryService + "/" + IgcTagDc.Response;
             private readonly Logger _logger;
             private readonly InventoryManager _inventoryManager;
             private readonly IMyBroadcastListener _igcListener;
+            private readonly InventoryServiceConfiguration _inventoryServiceConfiguration;
 
             #endregion
 
             #region construction
 
-            public InventoryController(Logger logger, InventoryManager inventoryManager, IMyIntergridCommunicationSystem igc)
+            public InventoryController(Logger logger, InventoryServiceConfiguration inventoryServiceConfiguration, InventoryManager inventoryManager, IMyIntergridCommunicationSystem igc)
             {
                 _logger = logger;
                 _inventoryManager = inventoryManager;
 
-                _igcListener = igc.RegisterBroadcastListener(IgcTagDc.InventoryServiceRequest);
+                _inventoryServiceConfiguration = inventoryServiceConfiguration;
+                _inventoryRequestTag = inventoryServiceConfiguration.ShipId + "/" + _inventoryRequestTag;   
+                _inventoryResponseTag = inventoryServiceConfiguration.ShipId + "/" + _inventoryResponseTag;
+
+                _igcListener = igc.RegisterBroadcastListener(_inventoryRequestTag);
+                _igcListener.SetMessageCallback(_inventoryRequestTag);
             }
 
             #endregion
@@ -36,10 +48,11 @@ namespace IngameScript
 
             public void Update()
             {
+                _logger.LogDebug("Checking for IGC messages");
                 while (_igcListener.HasPendingMessage)
                 {
                     var rawMessage = _igcListener.AcceptMessage();
-                    if (rawMessage.Tag == IgcTagDc.InventoryServiceRequest)
+                    if (rawMessage.Tag == IgcTagDc.InventoryService)
                     {
                         HandleRequest(rawMessage);
                     }
@@ -58,6 +71,7 @@ namespace IngameScript
                             var pullMessage = message as InventoryServiceMessage_PullItems;
                             if(pullMessage != null)
                             {
+                                _logger.LogDebug($"Received PullItems request: Item={pullMessage.Item}, Amount={pullMessage.Amount}, SourceInventory={pullMessage.SourceInventory}");
                                 _inventoryManager.PullItems(pullMessage);
                             }
                             else
@@ -65,10 +79,12 @@ namespace IngameScript
                                 _logger.LogError("Invalid PullItems message");
                             }
                             break;
+
                         case "PushItems":
                             var pushMessage = message as InventoryServiceMessage_PushItems;
                             if(pushMessage != null)
                             {
+                                _logger.LogDebug($"Received PushItems request: Item={pushMessage.Item}, Amount={pushMessage.Amount}, TargetInventory={pushMessage.TargetInventory}");
                                 _inventoryManager.PushItems(pushMessage);
                             }
                             else

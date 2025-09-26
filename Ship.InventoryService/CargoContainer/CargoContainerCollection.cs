@@ -11,11 +11,11 @@ namespace IngameScript
 {
     partial class Program 
     {
-        internal class CargoContainerCollection
+        public class CargoContainerCollection
         {
             #region private fields
             
-            private readonly List<CargoContainer> _cargoContainers;
+            private List<CargoContainer> _cargoContainers;
 
             #endregion
 
@@ -35,7 +35,32 @@ namespace IngameScript
 
             #region methods
 
-            public CargoContainer GetCargoContainerWithEnoughSpace(MyFixedPoint amount, MyItemType itemType)
+            public void UpdateCollection(List<IMyCargoContainer> cargoContainers)
+            {
+                _cargoContainers.Clear();
+                foreach (var cargoContainer in cargoContainers)
+                {
+                    _cargoContainers.Add(new CargoContainer(cargoContainer));
+                }
+                _cargoContainers = _cargoContainers.OrderBy(c => c.FillPriority).ToList();
+            }
+
+            public IMyInventory[] GetInventories()
+            {
+                return _cargoContainers.Select(c => c.Inventory).ToArray();
+            }
+
+            public CargoContainer GetCargoContainerByName(string name)
+            {
+                return _cargoContainers.FirstOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            public CargoContainer GetCargoContainerWithItem(MyItemType itemType, MyFixedPoint amount)
+            {
+                return _cargoContainers.FirstOrDefault(c => c.Items.Any(i => i.Item.Type == itemType && i.Item.Amount >= amount));
+            }
+
+            public CargoContainer GetCargoContainerWithEnoughSpace(MyItemType itemType, MyFixedPoint amount)
             {
                 return _cargoContainers.FirstOrDefault(c => c.CanItemsBeAdded(amount, itemType));
             }
