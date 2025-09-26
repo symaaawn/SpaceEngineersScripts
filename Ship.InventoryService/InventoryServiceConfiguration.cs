@@ -11,7 +11,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        internal class InventoryServiceConfiguration : BaseConfiguration
+        public class InventoryServiceConfiguration : BaseConfiguration
         {
             #region constants
 

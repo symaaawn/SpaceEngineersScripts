@@ -24,7 +24,7 @@ namespace IngameScript
 
             #region properties
 
-            private List<IMyCargoContainer> CargoContainers { get; set; }
+            private CargoContainerCollection CargoContainerCollection { get; set; }
 
             #endregion
 
@@ -34,7 +34,8 @@ namespace IngameScript
             {
                 _logger = logger;
                 _inventoryActions = inventoryActions;
-                CargoContainers = cargoContainers;
+                CargoContainerCollection = new CargoContainerCollection(cargoContainers);
+                _logger.LogInfo($"Initialized InventoryManager with {cargoContainers.Count} cargo containers.");
             }
 
             #endregion
@@ -43,6 +44,29 @@ namespace IngameScript
 
             public void Update()
             {
+                foreach(var inventory in CargoContainerCollection.GetInventories())
+                {
+                    var items = new List<MyInventoryItem>();
+                    inventory.GetItems(items);
+                    foreach (var item in items)
+                    {
+                        var testMessage = new InventoryServiceMessage_PullItems
+                        {
+                            RequestId = 1,
+                            Method = "PullItems",
+                            SourceInventory = "SourceContainer",
+                            Item = item.Type.ToString(),
+                            Amount = item.Amount
+                        };
+                        foreach(var line in testMessage.Serialize())
+                        {
+                            _logger.LogDebug($"{line.Key}: {line.Value}");
+                        }
+
+                        var itemType = (MyItemType)MyDefinitionId.Parse(testMessage.Item);
+                        _logger.LogDebug($"Item: {itemType}, Amount: {testMessage.Amount}");
+                    }
+                }
                 // Update logic for inventory management:
 
                 // ToDo: Update inventory displays
@@ -66,7 +90,7 @@ namespace IngameScript
                     return false;
                 }
 
-                if (!_inventoryActions.TransferItems(sourceInventory, CargoContainers[0].GetInventory(), itemType, pullMessage.Amount))
+                if (!_inventoryActions.TransferItems(sourceInventory, CargoContainerCollection.GetCargoContainerWithItem(itemType, pullMessage.Amount).Inventory, itemType, pullMessage.Amount))
                 {
                     _logger.LogError($"Failed to pull items '{pullMessage.Item}' from '{pullMessage.SourceInventory}'.");
                     return false;
@@ -91,7 +115,7 @@ namespace IngameScript
                     return false;
                 }
 
-                if (!_inventoryActions.TransferItems(CargoContainers[0].GetInventory(), targetInventory, itemType, pushMessage.Amount))
+                if (!_inventoryActions.TransferItems(CargoContainerCollection.GetCargoContainerWithItem(itemType, pushMessage.Amount).Inventory, targetInventory, itemType, pushMessage.Amount))
                 {
                     _logger.LogError($"Failed to push items '{pushMessage.Item}' to '{pushMessage.TargetInventory}'.");
                     return false;
@@ -102,21 +126,21 @@ namespace IngameScript
 
             public bool TransferItems(string source, string target, MyItemType itemType, MyFixedPoint amount)
             {
-                var sourceCargoContainer = CargoContainers.FirstOrDefault(c => c.CustomName.Equals(source));
+                var sourceCargoContainer = CargoContainerCollection.GetCargoContainerByName(source);
                 if (sourceCargoContainer == null)
                 {
                     _logger.LogError($"Source cargo container '{source}' not found.");
                     return false;
                 }
 
-                var targetCargoContainer = CargoContainers.FirstOrDefault(c => c.CustomName.Equals(target));
+                var targetCargoContainer = CargoContainerCollection.GetCargoContainerByName(source);
                 if (targetCargoContainer == null)
                 {
                     _logger.LogError($"Target cargo container '{target}' not found.");
                     return false;
                 }
 
-                return _inventoryActions.TransferItems(sourceCargoContainer.GetInventory(), targetCargoContainer.GetInventory(), itemType, amount);
+                return _inventoryActions.TransferItems(sourceCargoContainer.Inventory, targetCargoContainer.Inventory, itemType, amount);
             }
 
             #endregion
@@ -125,10 +149,7 @@ namespace IngameScript
 
             private void ConsolidateInventories()
             {
-                foreach (var source in CargoContainers)
-                {
 
-                }
             }
 
             #endregion

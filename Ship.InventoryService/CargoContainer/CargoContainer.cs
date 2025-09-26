@@ -23,9 +23,11 @@ namespace IngameScript
 
             #region properties
 
+            public string Name => _cargoContainer.CustomName;
             public CargoContainerTypeDc CargoContainerType => _cargoContainerConfiguration.CargoContainerType;
             public int FillPriority => _cargoContainerConfiguration.FillPriority;
             public List<InventoryItem> Items { get; private set; } = new List<InventoryItem>();
+            public IMyInventory Inventory => _cargoContainer.GetInventory();
 
             #endregion
 
