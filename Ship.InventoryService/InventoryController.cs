@@ -49,10 +49,11 @@ namespace IngameScript
             public void Update()
             {
                 _logger.LogDebug("Checking for IGC messages");
+
                 while (_igcListener.HasPendingMessage)
                 {
                     var rawMessage = _igcListener.AcceptMessage();
-                    if (rawMessage.Tag == IgcTagDc.InventoryService)
+                    if (rawMessage.Tag == _inventoryRequestTag)
                     {
                         HandleRequest(rawMessage);
                     }
@@ -61,12 +62,32 @@ namespace IngameScript
 
             public void HandleRequest(MyIGCMessage rawMessage)
             {
-                if(rawMessage.Data is ImmutableDictionary<string, string>)
+                if (rawMessage.Data is ImmutableDictionary<string, string>)
                 {
                     var message = new InventoryServiceMessage().Deserialize((ImmutableDictionary<string, string>)rawMessage.Data);
+                    _logger.LogDebug($"Received message with method {message.Method}");
 
                     switch (message.Method)
                     {
+                        case "GetInventory":
+                            var getMessage = message as InventoryServiceMessage_GetInventory;
+                            if(getMessage != null)
+                            {
+                                _logger.LogDebug($"Received GetInventory request");
+                                var inventory = _inventoryManager.GetInventory(getMessage);
+                                var responseMessage = new InventoryServiceMessage_GetInventory()
+                                {
+                                    RequestId = getMessage.RequestId,
+                                    Method = "GetInventory",
+                                    Items = inventory
+                                };
+                            }
+                            else
+                            {
+                                _logger.LogError("Invalid GetInventory message");
+                            }
+                            break;
+
                         case "PullItems":
                             var pullMessage = message as InventoryServiceMessage_PullItems;
                             if(pullMessage != null)
@@ -92,6 +113,7 @@ namespace IngameScript
                                 _logger.LogError("Invalid PushItems message");
                             }
                             break;
+
                         default:
                             _logger.LogError($"Unknown method: {message.Method}");
                             break;

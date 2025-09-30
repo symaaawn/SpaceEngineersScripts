@@ -35,7 +35,7 @@ namespace IngameScript
                 _logger = logger;
                 _inventoryActions = inventoryActions;
                 CargoContainerCollection = new CargoContainerCollection(cargoContainers);
-                _logger.LogInfo($"Initialized InventoryManager with {cargoContainers.Count} cargo containers.");
+                _logger.LogInfo($"Initialized InventoryManager with {CargoContainerCollection.ContainerCount} cargo containers. ({CargoContainerCollection.ItemCount} items)");
             }
 
             #endregion
@@ -44,34 +44,27 @@ namespace IngameScript
 
             public void Update()
             {
-                foreach(var inventory in CargoContainerCollection.GetInventories())
-                {
-                    var items = new List<MyInventoryItem>();
-                    inventory.GetItems(items);
-                    foreach (var item in items)
-                    {
-                        var testMessage = new InventoryServiceMessage_PullItems
-                        {
-                            RequestId = 1,
-                            Method = "PullItems",
-                            SourceInventory = "SourceContainer",
-                            Item = item.Type.ToString(),
-                            Amount = item.Amount
-                        };
-                        foreach(var line in testMessage.Serialize())
-                        {
-                            _logger.LogDebug($"{line.Key}: {line.Value}");
-                        }
-
-                        var itemType = (MyItemType)MyDefinitionId.Parse(testMessage.Item);
-                        _logger.LogDebug($"Item: {itemType}, Amount: {testMessage.Amount}");
-                    }
-                }
                 // Update logic for inventory management:
 
                 // ToDo: Update inventory displays
 
                 // ToDo: Check for low/high stock and trigger transfers or consolidate inventories
+            }
+
+            public List<MyInventoryItem> GetInventory(InventoryServiceMessage_GetInventory getMessage)
+            {
+                var items = new List<MyInventoryItem>();
+                var tempItems = new List<MyInventoryItem>();
+                var cargoContainerInventories = CargoContainerCollection.GetInventories();
+
+                foreach (var inventory in cargoContainerInventories)
+                {
+                    inventory.GetItems(tempItems);
+                    items.AddRange(tempItems);
+                    tempItems.Clear();
+                }
+
+                return items;
             }
 
             public bool PullItems(InventoryServiceMessage_PullItems pullMessage)
@@ -84,13 +77,8 @@ namespace IngameScript
                 }
 
                 var itemType = (MyItemType)MyDefinitionId.Parse(pullMessage.Item);
-                if (itemType == null)
-                {
-                    _logger.LogError($"Invalid item type '{pullMessage.Item}'.");
-                    return false;
-                }
 
-                if (!_inventoryActions.TransferItems(sourceInventory, CargoContainerCollection.GetCargoContainerWithItem(itemType, pullMessage.Amount).Inventory, itemType, pullMessage.Amount))
+                if (!_inventoryActions.TransferItems(sourceInventory, CargoContainerCollection.GetCargoContainerWithEnoughSpace(itemType, pullMessage.Amount).Inventory, itemType, pullMessage.Amount))
                 {
                     _logger.LogError($"Failed to pull items '{pullMessage.Item}' from '{pullMessage.SourceInventory}'.");
                     return false;
@@ -109,11 +97,6 @@ namespace IngameScript
                 }
 
                 var itemType = (MyItemType)MyDefinitionId.Parse(pushMessage.Item);
-                if (itemType == null)
-                {
-                    _logger.LogError($"Invalid item type '{pushMessage.Item}'.");
-                    return false;
-                }
 
                 if (!_inventoryActions.TransferItems(CargoContainerCollection.GetCargoContainerWithItem(itemType, pushMessage.Amount).Inventory, targetInventory, itemType, pushMessage.Amount))
                 {

@@ -16,7 +16,7 @@ namespace IngameScript
             private readonly Logger _logger;
             private readonly RefineryServiceConfiguration _refineryServiceConfiguration;
             private readonly IMyIntergridCommunicationSystem _igc;
-            private readonly string _broadcastTag = IgcTagDc.RefineryServiceMessage + "/" + IgcTagDc.Request;
+            private readonly string _broadcastTag = IgcTagDc.InventoryService + "/" + IgcTagDc.Request;
 
             private int _messageCount = 0;
 
@@ -54,9 +54,14 @@ namespace IngameScript
                     RequestId = ++_messageCount,
                     Method = "PushItems",
                     Item = "MyObjectBuilder_Ore/Iron",
-                    Amount = 100,
-                    TargetInventory = "MyInventory"
+                    Amount = 1,
+                    TargetInventory = "Refinery1"
                 };
+                _logger.LogDebug($"Sending PushItems request: tag={_broadcastTag}");
+                foreach(var line in message.Serialize())
+                {
+                    _logger.LogDebug($"{line.Key}: {line.Value}");
+                }
                 _igc.SendBroadcastMessage(_broadcastTag, message.Serialize());
             }
 

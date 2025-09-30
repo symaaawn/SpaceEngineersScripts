@@ -11,6 +11,7 @@
             public const string MeteorDefenseSystemMessage = "MeteorDefenseSystemMessage";
             public const string InventoryService = "InventoryService";
             public const string RelativePositioningSystemServiceMessage = "RelativePositioningSystemServiceMessage";
+            public const string RefineryServiceMessage = "RefineryServiceMessage";
 
             public const string Update = "Update";
             public const string Request = "Request";

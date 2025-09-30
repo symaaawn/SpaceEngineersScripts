@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_GetInventory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_PullItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_PushItems.cs" />
   </ItemGroup>

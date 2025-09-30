@@ -36,18 +36,49 @@ namespace IngameScript
 
                 switch (Method)
                 {
+                    case "GetInventory":
+                        var inventoryRaw = raw["Inventory"];
+                        var inventory = ImmutableDictionary<string, MyFixedPoint>.Empty;
+                        foreach (var item in inventoryRaw.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            var parts = item.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (parts.Length == 2)
+                            {
+                                var key = parts[0];
+                                var value = MyFixedPoint.DeserializeStringSafe(parts[1]);
+                                inventory = inventory.Add(key, value);
+                            }
+                        }
+
+                        return new InventoryServiceMessage_GetInventory()
+                        {
+                            RequestId = RequestId,
+                            Method = Method,
+                            Item = Item,
+                            Amount = Amount,
+                            Inventory = inventory
+                        };
+
                     case "PullItems":
                         return new InventoryServiceMessage_PullItems()
                         {
                             RequestId = RequestId,
                             Method = Method,
+                            Item = Item,
+                            Amount = Amount,
+                            SourceInventory = raw["SourceInventory"]
                         };
+
                     case "PushItems":
                         return new InventoryServiceMessage_PushItems()
                         {
                             RequestId = RequestId,
                             Method = Method,
+                            Item = Item,
+                            Amount = Amount,
+                            TargetInventory = raw["TargetInventory"]
                         };
+
                     default:
                         return null;
                         

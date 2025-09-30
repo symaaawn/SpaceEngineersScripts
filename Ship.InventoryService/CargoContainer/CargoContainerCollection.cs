@@ -35,6 +35,9 @@ namespace IngameScript
 
             #region methods
 
+            public int ContainerCount => _cargoContainers.Count;
+            public int ItemCount => _cargoContainers.Select(c => c.Items).Count();
+
             public void UpdateCollection(List<IMyCargoContainer> cargoContainers)
             {
                 _cargoContainers.Clear();

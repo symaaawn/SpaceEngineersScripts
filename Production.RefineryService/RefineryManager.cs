@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sandbox.ModAPI.Ingame;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,27 @@ namespace IngameScript
 
             #region properties
 
+            private RefineryCollection RefineryCollection { get; set; }
+
             #endregion
 
             #region construction
 
-            public RefineryManager(Logger logger, RefineryActions refineryActions, RefineryClient refineryClient)
+            public RefineryManager(Logger logger, RefineryActions refineryActions, RefineryClient refineryClient, List<IMyRefinery> refineries)
             {
                 _logger = logger;
                 _refineryActions = refineryActions;
-                _refineryClient = refineryClient;   
+                _refineryClient = refineryClient;
+                RefineryCollection = new RefineryCollection(refineries);
+            }
+
+            #endregion
+
+            #region methods
+
+            public void Update()
+            {
+                var idleRefineries = RefineryCollection.GetIdleRefineries();
             }
 
             #endregion

@@ -45,6 +45,8 @@ namespace IngameScript
 
         #region properties
 
+        public List<IMyInventory> SourceInventories { get; set; } = new List<IMyInventory>();
+
         #endregion
 
         public Program()
@@ -55,12 +57,32 @@ namespace IngameScript
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
             _logger.AddLogger(new BroadcastControllerLogger(this));
 
-            Runtime.UpdateFrequency = UpdateFrequency.Update10;
+            _logger.LogDebug($"Starting RefineryService...");
+
+            Runtime.UpdateFrequency = UpdateFrequency.Update100;
+
+            var refineries = new List<IMyRefinery>();
+            GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, RefineryServiceTag));
+            if (refineries.Count == 0)
+            {
+                _logger.LogFatal($"No cargo containers with tag '{RefineryServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {refineries.Count} cargo containers with tag '{RefineryServiceTag}'.");
+            }
 
             _refineryClient = new RefineryClient(_logger, _refineryServiceConfiguration, IGC);
+            _logger.LogDebug("Initialized RefineryClient");
+
             _refineryActions = new RefineryActions(_logger, GridTerminalSystem);
-            _refineryManager = new RefineryManager(_logger, _refineryActions, _refineryClient);
-            _refineryController = new RefineryController(_logger, _refineryManager, IGC);
+            _logger.LogDebug("Initialized RefineryActions");
+
+            _refineryManager = new RefineryManager(_logger, _refineryActions, _refineryClient, refineries);
+            _logger.LogDebug("Initialized RefineryManager");
+
+            _refineryController = new RefineryController(_logger, _refineryServiceConfiguration, _refineryManager, IGC);
+            _logger.LogDebug("Initialized RefineryController");
         }
 
         public void Save()
@@ -73,17 +95,13 @@ namespace IngameScript
             // needed.
         }
 
-        public void Main(string argument, UpdateType updateSource)
+        public void Main(string argument, UpdateType updateType)
         {
-            // The main entry point of the script, invoked every time
-            // one of the programmable block's Run actions are invoked,
-            // or the script updates itself. The updateSource argument
-            // describes where the update came from. Be aware that the
-            // updateSource is a  bitfield  and might contain more than 
-            // one update type.
-            // 
-            // The method itself is required, but the arguments above
-            // can be removed if not needed.
+            if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
+            {
+                _logger.LogDebug($"Main");
+                _refineryManager.Update();
+            }
         }
     }
 }

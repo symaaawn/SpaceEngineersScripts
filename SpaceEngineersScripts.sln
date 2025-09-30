@@ -41,9 +41,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.RelativePositioningSys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ship.InventoryService", "Ship.InventoryService\Ship.InventoryService.csproj", "{AB043293-38AF-4F47-8301-059F4DC39DA6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.InventoryService.Contracts", "Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.shproj", "{CC301D45-24DC-4EC3-99E7-A1013CFF0B94}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Production.RefineryService", "Production.RefineryService\Production.RefineryService.csproj", "{7D603B03-21C5-47D1-B490-69B0C514696E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.InventoryService.Contracts", "Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.shproj", "{CC301D45-24DC-4EC3-99E7-A1013CFF0B94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
