@@ -20,20 +20,31 @@ using VRageMath;
 
 namespace IngameScript
 {
-    partial class Program
+    public partial class Program : MyGridProgram
     {
-        public abstract class IgcMessageBase
+        public class InventoryItem
         {
-            public virtual int RequestId { get; internal set; }
-            public virtual string Method { get; internal set; }
+            #region properties
 
-            public abstract IgcMessageBase Deserialize(ImmutableDictionary<string, string> raw);
-            public virtual ImmutableDictionary<string, string> Serialize()
+            public MyInventoryItem Item { get; }
+            public IMyInventory Inventory { get; }
+
+            public string SubType { get; }
+
+
+            #endregion
+
+            #region construction
+
+            public InventoryItem(MyInventoryItem item, IMyInventory inventory)
             {
-                return ImmutableDictionary<string, string>.Empty
-                    .Add("RequestId", RequestId.ToString())
-                    .Add("Method", Method);
+                Item = item;
+                Inventory = inventory;
+
+                SubType = item.Type.SubtypeId;
             }
+
+            #endregion
         }
     }
 }

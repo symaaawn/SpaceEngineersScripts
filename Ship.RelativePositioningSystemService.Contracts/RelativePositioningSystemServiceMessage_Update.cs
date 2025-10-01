@@ -28,9 +28,7 @@ namespace IngameScript
 
             public override ImmutableDictionary<string, string> Serialize()
             {
-                return ImmutableDictionary<string, string>.Empty
-                    .Add("RequestId", RequestId.ToString())
-                    .Add("Method", Method)
+                return base.Serialize()
                     .Add("ReferenceCoordinates.M11", ReferenceMatrix.M11.ToString())
                     .Add("ReferenceCoordinates.M12", ReferenceMatrix.M12.ToString())
                     .Add("ReferenceCoordinates.M13", ReferenceMatrix.M13.ToString())

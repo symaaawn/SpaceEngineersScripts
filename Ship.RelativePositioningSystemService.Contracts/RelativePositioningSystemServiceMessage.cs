@@ -50,7 +50,7 @@ namespace IngameScript
 
             public override ImmutableDictionary<string, string> Serialize()
             {
-                return ImmutableDictionary<string, string>.Empty;
+                return base.Serialize();
             }
         }
     }

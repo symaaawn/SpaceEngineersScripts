@@ -20,20 +20,25 @@ using VRageMath;
 
 namespace IngameScript
 {
-    partial class Program
+    public partial class Program : MyGridProgram
     {
-        public abstract class IgcMessageBase
+        public class RefineryDetailedInfoDc
         {
-            public virtual int RequestId { get; internal set; }
-            public virtual string Method { get; internal set; }
+            #region properties
 
-            public abstract IgcMessageBase Deserialize(ImmutableDictionary<string, string> raw);
-            public virtual ImmutableDictionary<string, string> Serialize()
+            public float RefineSpeed { get; set; }
+            public float YieldRate { get; set; }
+            public float PowerEfficiency { get; set; }
+
+            #endregion
+
+            #region construction
+
+            public RefineryDetailedInfoDc()
             {
-                return ImmutableDictionary<string, string>.Empty
-                    .Add("RequestId", RequestId.ToString())
-                    .Add("Method", Method);
             }
+
+            #endregion
         }
     }
 }

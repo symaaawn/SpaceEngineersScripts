@@ -9,6 +9,9 @@
     <Import_RootNamespace>IngameScript</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Common.Configuration\BaseConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_GetInventory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_PullItems.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InventoryServiceMessage_PushItems.cs" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using Sandbox.Game.EntityComponents;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -22,17 +22,14 @@ namespace IngameScript
 {
     partial class Program
     {
-        public abstract class IgcMessageBase
+        public class InventoryServiceMessage_PushItems : InventoryServiceMessage
         {
-            public virtual int RequestId { get; internal set; }
-            public virtual string Method { get; internal set; }
+            public string TargetInventory {  get; set; }
 
-            public abstract IgcMessageBase Deserialize(ImmutableDictionary<string, string> raw);
-            public virtual ImmutableDictionary<string, string> Serialize()
+            public override ImmutableDictionary<string, string> Serialize()
             {
-                return ImmutableDictionary<string, string>.Empty
-                    .Add("RequestId", RequestId.ToString())
-                    .Add("Method", Method);
+                return base.Serialize()
+                    .Add("TargetInventory", TargetInventory);
             }
         }
     }

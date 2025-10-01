@@ -15,7 +15,7 @@ namespace IngameScript
             #region private fields
 
             private readonly Logger _logger;
-            private readonly ProgrammingBlockConfiguration _programmingBlockConfiguration;
+            private readonly BaseConfiguration _programmingBlockConfiguration;
             private readonly IMyIntergridCommunicationSystem _igc;
             private readonly string _broadcastTag = IgcTagDc.RelativePositioningSystemServiceMessage + "/" + IgcTagDc.Update;
 
@@ -25,7 +25,7 @@ namespace IngameScript
 
             #region construction
 
-            public RelativePositioningSystemClient(Logger logger, ProgrammingBlockConfiguration programmingBlockConfiguration, IMyIntergridCommunicationSystem igc)
+            public RelativePositioningSystemClient(Logger logger, BaseConfiguration programmingBlockConfiguration, IMyIntergridCommunicationSystem igc)
             {
                 _logger = logger;
                 _programmingBlockConfiguration = programmingBlockConfiguration;

@@ -380,3 +380,7 @@ FodyWeavers.xsd
 /Ship.TunnelBoringMachine/Ship.TunnelBoringMachine.mdk.local.ini
 /Storage.InventoryDisplay/Storage.InventoryDisplay.mdk.local.ini
 /Refinery.OreDistributionSystem/Refinery.OreDistributionSystem.mdk.local.ini
+/Ship.InventoryService/Ship.InventoryService.mdk.local.ini
+/Production.RefineryService/Production.RefineryService.mdk.local.ini
+/Tester.IgcTester/Tester.IgcTester.mdk.local.ini
+/Ship.RelativePositioningSystemService/Ship.RelativePositioningSystemService.mdk.local.ini
