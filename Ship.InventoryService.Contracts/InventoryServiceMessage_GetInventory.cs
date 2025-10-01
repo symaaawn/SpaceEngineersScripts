@@ -24,7 +24,7 @@ namespace IngameScript
     {
         public class InventoryServiceMessage_GetInventory : InventoryServiceMessage
         {
-            public ImmutableDictionary<string, MyFixedPoint> Inventory { get; set; } = ImmutableDictionary<string, MyFixedPoint>.Empty;
+            public Dictionary<string, MyFixedPoint> Inventory { get; set; } = new Dictionary<string, MyFixedPoint>();
 
             public override ImmutableDictionary<string, string> Serialize()
             {

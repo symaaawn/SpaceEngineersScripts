@@ -96,7 +96,7 @@ namespace IngameScript
             if ((updateType & UpdateType.IGC) != 0)
             {
                 _logger.LogInfo("Processing IGC messages");
-                _inventoryController.Update();
+                _inventoryController.CheckRequests();
             }
 
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)

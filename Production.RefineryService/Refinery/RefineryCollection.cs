@@ -22,12 +22,12 @@ namespace IngameScript
 
             #region construction
 
-            public RefineryCollection(List<IMyRefinery> cargoContainers)
+            public RefineryCollection(List<IMyRefinery> refineries)
             {
                 _refineries = new List<Refinery>();
-                foreach (var cargoContainer in cargoContainers)
+                foreach (var refinery in refineries)
                 {
-                    _refineries.Add(new Refinery(cargoContainer));
+                    _refineries.Add(new Refinery(refinery));
                 }
             }
 
@@ -42,7 +42,7 @@ namespace IngameScript
                 return _refineries.FirstOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            public Refinery[] GetIdleRefineries(float buffer = 5f)
+            public List<Refinery> GetIdleRefineries(float buffer = 5f)
             {
                 var idleRefineries = new List<Refinery>();
 
@@ -56,7 +56,7 @@ namespace IngameScript
                     }
                 }
 
-                return idleRefineries.ToArray();
+                return idleRefineries;
             }
 
             #endregion

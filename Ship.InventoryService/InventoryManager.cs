@@ -51,7 +51,7 @@ namespace IngameScript
                 // ToDo: Check for low/high stock and trigger transfers or consolidate inventories
             }
 
-            public List<MyInventoryItem> GetInventory(InventoryServiceMessage_GetInventory getMessage)
+            public List<MyInventoryItem> GetInventory()
             {
                 var items = new List<MyInventoryItem>();
                 var tempItems = new List<MyInventoryItem>();

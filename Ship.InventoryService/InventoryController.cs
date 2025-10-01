@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRage;
 
 namespace IngameScript
 {
@@ -22,6 +23,7 @@ namespace IngameScript
             private readonly string _inventoryResponseTag = IgcTagDc.InventoryService + "/" + IgcTagDc.Response;
             private readonly Logger _logger;
             private readonly InventoryManager _inventoryManager;
+            private readonly IMyIntergridCommunicationSystem _igc;
             private readonly IMyBroadcastListener _igcListener;
             private readonly InventoryServiceConfiguration _inventoryServiceConfiguration;
 
@@ -38,6 +40,7 @@ namespace IngameScript
                 _inventoryRequestTag = inventoryServiceConfiguration.ShipId + "/" + _inventoryRequestTag;   
                 _inventoryResponseTag = inventoryServiceConfiguration.ShipId + "/" + _inventoryResponseTag;
 
+                _igc = igc;
                 _igcListener = igc.RegisterBroadcastListener(_inventoryRequestTag);
                 _igcListener.SetMessageCallback(_inventoryRequestTag);
             }
@@ -46,7 +49,7 @@ namespace IngameScript
 
             #region methods
 
-            public void Update()
+            public void CheckRequests()
             {
                 _logger.LogDebug("Checking for IGC messages");
 
@@ -71,16 +74,27 @@ namespace IngameScript
                     {
                         case "GetInventory":
                             var getMessage = message as InventoryServiceMessage_GetInventory;
+
                             if(getMessage != null)
                             {
                                 _logger.LogDebug($"Received GetInventory request");
-                                var inventory = _inventoryManager.GetInventory(getMessage);
+                                var inventory = _inventoryManager.GetInventory();
+
+                                var inventoryDict = new Dictionary<string, MyFixedPoint>();
+                                foreach (var item in inventory)
+                                {
+                                    inventoryDict.Add(item.Type.ToString(), item.Amount);
+                                }
+
                                 var responseMessage = new InventoryServiceMessage_GetInventory()
                                 {
                                     RequestId = getMessage.RequestId,
                                     Method = "GetInventory",
-                                    Items = inventory
+                                    Inventory = inventoryDict
                                 };
+
+                                _logger.LogDebug($"Sending GetInventory response: {string.Join(", ", inventoryDict.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
+                                _igc.SendBroadcastMessage(_inventoryResponseTag, responseMessage.Serialize());
                             }
                             else
                             {
@@ -90,6 +104,7 @@ namespace IngameScript
 
                         case "PullItems":
                             var pullMessage = message as InventoryServiceMessage_PullItems;
+
                             if(pullMessage != null)
                             {
                                 _logger.LogDebug($"Received PullItems request: Item={pullMessage.Item}, Amount={pullMessage.Amount}, SourceInventory={pullMessage.SourceInventory}");
@@ -103,6 +118,7 @@ namespace IngameScript
 
                         case "PushItems":
                             var pushMessage = message as InventoryServiceMessage_PushItems;
+
                             if(pushMessage != null)
                             {
                                 _logger.LogDebug($"Received PushItems request: Item={pushMessage.Item}, Amount={pushMessage.Amount}, TargetInventory={pushMessage.TargetInventory}");

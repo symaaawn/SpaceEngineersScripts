@@ -38,7 +38,7 @@ namespace IngameScript
                 {
                     case "GetInventory":
                         var inventoryRaw = raw["Inventory"];
-                        var inventory = ImmutableDictionary<string, MyFixedPoint>.Empty;
+                        var inventory = new Dictionary<string, MyFixedPoint>();
                         foreach (var item in inventoryRaw.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                         {
                             var parts = item.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
@@ -46,7 +46,7 @@ namespace IngameScript
                             {
                                 var key = parts[0];
                                 var value = MyFixedPoint.DeserializeStringSafe(parts[1]);
-                                inventory = inventory.Add(key, value);
+                                inventory.Add(key, value);
                             }
                         }
 

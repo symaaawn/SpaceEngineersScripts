@@ -65,7 +65,7 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, RefineryServiceTag));
             if (refineries.Count == 0)
             {
-                _logger.LogFatal($"No cargo containers with tag '{RefineryServiceTag}' found.");
+                _logger.LogFatal($"No refinery with tag '{RefineryServiceTag}' found.");
             }
             else
             {
@@ -87,16 +87,17 @@ namespace IngameScript
 
         public void Save()
         {
-            // Called when the program needs to save its state. Use
-            // this method to save your state to the Storage field
-            // or some other means. 
-            // 
-            // This method is optional and can be removed if not
-            // needed.
         }
 
         public void Main(string argument, UpdateType updateType)
         {
+            if ((updateType & UpdateType.IGC) != 0)
+            {
+                _logger.LogInfo("Processing IGC messages");
+                _refineryClient.CheckResponses();
+                _refineryManager.ProcessInventoryResponse();
+            }
+
             if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
             {
                 _logger.LogDebug($"Main");
