@@ -33,25 +33,28 @@ namespace IngameScript
             #region private fields
 
             private readonly TextPanelDisplay _programmingBlockDisplay;
-            //private readonly FixedLengthStringQueue _logHistory;
+            private readonly FixedLengthStringQueue _logHistory;
+            private readonly LogLevelDc _logLevel;
 
             #endregion
 
             #region construction
 
-            public ProgrammingBlockLogger(IMyProgrammableBlock programmableBlock)
+            public ProgrammingBlockLogger(IMyProgrammableBlock programmableBlock, LogLevelDc logLevel = LogLevelDc.Debug)
             {
                 _programmingBlockDisplay = new TextPanelDisplay(programmableBlock.GetSurface(0));
                 var lines = (int)(_programmingBlockDisplay.Viewport.Height / CharacterHeight) - 3;
-                //_logHistory = new FixedLengthStringQueue (lines);
+                _logHistory = new FixedLengthStringQueue(lines);
             }
 
             #endregion
 
-            public void Log(string message)
+            public void Log(string message, LogLevelDc logLevel)
             {
-                //_logHistory.Enqueue(message);
-                _programmingBlockDisplay.RenderDisplay(new List<string>() { message });// _logHistory.ToList());
+                if (logLevel < _logLevel) return;
+
+                _logHistory.Enqueue(message);
+                _programmingBlockDisplay.RenderDisplay(_logHistory.GetList());
             }
         }
     }

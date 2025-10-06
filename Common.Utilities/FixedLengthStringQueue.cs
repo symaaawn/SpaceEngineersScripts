@@ -60,9 +60,9 @@ namespace IngameScript
                 return _queue.ToArray();
             }
 
-            public List<string> ToList()
+            public List<string> GetList()
             {
-                return _queue.ToList();
+                return new List<string>(_queue);
             }
         }
     }

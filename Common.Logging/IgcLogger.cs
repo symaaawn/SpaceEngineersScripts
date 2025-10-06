@@ -28,21 +28,25 @@ namespace IngameScript
 
             private readonly IMyIntergridCommunicationSystem _igcSystem;
             private readonly TransmissionDistance _transmissionDistance;
+            private readonly LogLevelDc _logLevel;
 
             #endregion
 
             #region construction
 
-            public IgcLogger(IMyIntergridCommunicationSystem igcSystem, TransmissionDistance transmissionDistance = TransmissionDistance.AntennaRelay)
+            public IgcLogger(IMyIntergridCommunicationSystem igcSystem, TransmissionDistance transmissionDistance = TransmissionDistance.AntennaRelay, LogLevelDc logLevel = LogLevelDc.Debug)
             {
                 _igcSystem = igcSystem;
                 _transmissionDistance = transmissionDistance;
+                _logLevel = logLevel;
             }
 
             #endregion
 
-            public void Log(string message)
+            public void Log(string message, LogLevelDc logLevel)
             {
+                if (logLevel < _logLevel) return;
+
                 _igcSystem.SendBroadcastMessage(IgcTagDc.LogMessage, message, _transmissionDistance);
             }
         }

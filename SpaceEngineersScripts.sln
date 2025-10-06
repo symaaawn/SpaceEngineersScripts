@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11018.127 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ship.RelativePositioningSystem", "Ship.RelativePositioningSystem\Ship.RelativePositioningSystem.csproj", "{6C0213FF-A7D2-424B-B2D1-DE69EA002112}"
 EndProject
@@ -110,6 +110,7 @@ Global
 		Common.Displays\Common.Displays.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
 		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
 		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{1847646a-a170-49ac-ac66-f2114a23f221}*SharedItemsImports = 5
 		Common.Configuration\Common.Configuration.projitems*{3c9084dc-4841-4f25-9e5c-c320da9c95f1}*SharedItemsImports = 13
 		Common.Utilities\Common.Utilities.projitems*{41b9acb1-e63f-4cc4-867a-33f37dcbf3ce}*SharedItemsImports = 13
@@ -135,11 +136,13 @@ Global
 		Common.Displays\Common.Displays.projitems*{7d603b03-21c5-47d1-b490-69b0c514696e}*SharedItemsImports = 5
 		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{7d603b03-21c5-47d1-b490-69b0c514696e}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{7d603b03-21c5-47d1-b490-69b0c514696e}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{7d603b03-21c5-47d1-b490-69b0c514696e}*SharedItemsImports = 5
 		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{7d603b03-21c5-47d1-b490-69b0c514696e}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Displays\Common.Displays.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{7f0a49ad-0f83-a49e-a049-4fdda257f3be}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{7f4a83ee-3dba-4240-8c0b-155bff5996af}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
 		Common.Contracts\Common.Contracts.projitems*{7f91a392-09cd-40d8-91fd-cc231286f3dc}*SharedItemsImports = 5
@@ -153,6 +156,7 @@ Global
 		Common.Displays\Common.Displays.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Common.Logging\Common.Logging.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{8e4b14d6-22ac-47b9-aa33-77bacff3083f}*SharedItemsImports = 5
 		Common.Configuration\Common.Configuration.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Constants\Common.Constants.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5

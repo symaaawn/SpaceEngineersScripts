@@ -34,6 +34,8 @@ namespace IngameScript
                 _relativePositioningSystemClient = relativePositioningSystemClient;
                 _statusLights = statusLights;
                 _referencePoint = referencePoint;
+
+                _logger.LogInfo("Initialized RelativePositioningSystemManager");
             }
 
             #endregion

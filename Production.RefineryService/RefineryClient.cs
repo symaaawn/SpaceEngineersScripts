@@ -47,6 +47,8 @@ namespace IngameScript
                 _igcListener.SetMessageCallback(_inventoryResponseTag);
 
                 PendingMessages = new List<InventoryServiceMessage>();
+
+                _logger.LogInfo("Initialized RefineryClient");
             }
 
             #endregion

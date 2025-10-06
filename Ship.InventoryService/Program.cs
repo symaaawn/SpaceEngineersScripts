@@ -77,13 +77,8 @@ namespace IngameScript
             }
 
             _inventoryActions = new InventoryActions(_logger, GridTerminalSystem);
-            _logger.LogDebug("Initialized InventoryActions");
-
             _inventoryManager = new InventoryManager(_logger, _inventoryActions, cargoContainers);
-            _logger.LogDebug("Initialized InventoryManager");
-
             _inventoryController = new InventoryController(_logger, _inventoryServiceConfiguration, _inventoryManager, IGC);
-            _logger.LogDebug("Initialized InventoryController");
 
         }
 
