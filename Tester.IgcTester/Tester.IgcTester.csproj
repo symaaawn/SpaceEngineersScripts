@@ -37,4 +37,6 @@
 
     <Import Project="..\Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems" Label="Shared" />
 
+    <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
+
 </Project>

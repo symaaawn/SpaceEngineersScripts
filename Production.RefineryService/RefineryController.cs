@@ -35,6 +35,8 @@ namespace IngameScript
 
                 _igcListener = igc.RegisterBroadcastListener(IgcTagDc.RefineryServiceMessage);
                 _igcListener.SetMessageCallback(_refineryRequestTag);
+
+                _logger.LogInfo("Initialized RefineryController");
             }
 
             #endregion

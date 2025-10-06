@@ -40,4 +40,6 @@
 
     <Import Project="..\Common.IgcMessageBase\Common.IgcMessageBase.projitems" Label="Shared" />
 
+    <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
+
 </Project>

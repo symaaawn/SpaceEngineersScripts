@@ -43,6 +43,8 @@ namespace IngameScript
                 _igc = igc;
                 _igcListener = igc.RegisterBroadcastListener(_inventoryRequestTag);
                 _igcListener.SetMessageCallback(_inventoryRequestTag);
+
+                _logger.LogInfo("Initialized InventoryController");
             }
 
             #endregion

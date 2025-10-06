@@ -27,6 +27,8 @@ namespace IngameScript
             {
                 _logger = logger;
                 _gridTerminalSystem = myGridTerminalSystem;
+
+                _logger.LogInfo("Initialized InventoryActions");
             }
 
             #endregion

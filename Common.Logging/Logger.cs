@@ -61,35 +61,35 @@ namespace IngameScript
             {
                 if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Debug)
                     return;
-                Log($"[{_logLevelAbbreviations[LogLevelDc.Debug]}] {message}");
+                Log($"[{_logLevelAbbreviations[LogLevelDc.Debug]}] {message}", LogLevelDc.Debug);
             }
 
             public void LogInfo(string message)
             {
                 if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Info)
                     return;
-                Log($"[{_logLevelAbbreviations[LogLevelDc.Info]}] {message}");
+                Log($"[{_logLevelAbbreviations[LogLevelDc.Info]}] {message}", LogLevelDc.Info);
             }
 
             public void LogWarning(string message)
             {
                 if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Warning)
                     return;
-                Log($"[{_logLevelAbbreviations[LogLevelDc.Warning]}] {message}");
+                Log($"[{_logLevelAbbreviations[LogLevelDc.Warning]}] {message}", LogLevelDc.Warning);
             }
 
             public void LogError(string message)
             {
                 if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Error)
                     return;
-                Log($"[{_logLevelAbbreviations[LogLevelDc.Error]}] {message}");
+                Log($"[{_logLevelAbbreviations[LogLevelDc.Error]}] {message}", LogLevelDc.Error);
             }
 
             public void LogFatal(string message)
             {
                 if (_programInformation != null && _programInformation.LogLevel > LogLevelDc.Fatal)
                     return;
-                Log($"[{_logLevelAbbreviations[LogLevelDc.Fatal]}] {message}");
+                Log($"[{_logLevelAbbreviations[LogLevelDc.Fatal]}] {message}", LogLevelDc.Fatal);
             }
 
             #endregion
@@ -99,18 +99,18 @@ namespace IngameScript
                 _loggerList.Add(logger);
             }
 
-            public void Log(string message)
+            public void Log(string message, LogLevelDc logLevel)
             {
                 foreach (var logger in _loggerList)
                 {
-                    logger.Log($"{DateTime.Now.ToShortTimeString()} {message}");
+                    logger.Log($"{DateTime.Now.ToShortTimeString()} {message}", logLevel);
                 }
             }
         }
 
         public interface ILogger
         {
-            void Log(string message);
+            void Log(string message, LogLevelDc logLevel);
         }
     }
 }

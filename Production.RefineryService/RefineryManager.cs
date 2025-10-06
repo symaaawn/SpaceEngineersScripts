@@ -36,6 +36,8 @@ namespace IngameScript
                 _refineryActions = refineryActions;
                 _refineryClient = refineryClient;
                 RefineryCollection = new RefineryCollection(refineries);
+
+                _logger.LogInfo("Initialized RefineryManager");
             }
 
             #endregion

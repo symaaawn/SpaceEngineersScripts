@@ -23,6 +23,8 @@ namespace IngameScript
             public RelativePositioningSystemActions(Logger logger)
             {
                 _logger = logger;
+
+                _logger.LogInfo("Initialized RelativePositioningSystemActions");
             }
 
             #endregion

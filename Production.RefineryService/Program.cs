@@ -73,16 +73,11 @@ namespace IngameScript
             }
 
             _refineryClient = new RefineryClient(_logger, _refineryServiceConfiguration, IGC);
-            _logger.LogDebug("Initialized RefineryClient");
-
             _refineryActions = new RefineryActions(_logger, GridTerminalSystem);
-            _logger.LogDebug("Initialized RefineryActions");
-
             _refineryManager = new RefineryManager(_logger, _refineryActions, _refineryClient, refineries);
-            _logger.LogDebug("Initialized RefineryManager");
-
             _refineryController = new RefineryController(_logger, _refineryServiceConfiguration, _refineryManager, IGC);
-            _logger.LogDebug("Initialized RefineryController");
+
+            _logger.LogInfo($"RefineryService started.");
         }
 
         public void Save()

@@ -28,21 +28,25 @@ namespace IngameScript
 
             private Queue<string> _logHistory;
             private readonly Action<string> _echo;
+            private readonly LogLevelDc _logLevel;
 
             #endregion
 
             #region construction
 
-            public DetailAreaLogger(Action<string> echoCallback)
+            public DetailAreaLogger(Action<string> echoCallback, LogLevelDc logLevel = LogLevelDc.Debug)
             {
                 _logHistory = new Queue<string>();
                 _echo = echoCallback;
+                _logLevel = logLevel;
             }
 
             #endregion
 
-            public void Log(string message)
+            public void Log(string message, LogLevelDc logLevel)
             {
+                if (logLevel < _logLevel) return;
+
                 _logHistory.Enqueue(message);
                 _echo(message);
             }

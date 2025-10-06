@@ -33,12 +33,13 @@ namespace IngameScript
             #region private fields
 
             private readonly IMyChatBroadcastControllerComponent _chatBroadcastController;
+            private readonly LogLevelDc _logLevel;
 
             #endregion
 
             #region construction
 
-            public BroadcastControllerLogger(Program program)
+            public BroadcastControllerLogger(Program program, LogLevelDc logLevel = LogLevelDc.Debug)
             {
                 var broadcastControllers = new List<IMyBroadcastController>();
                 program.GridTerminalSystem.GetBlocksOfType(broadcastControllers);
@@ -49,12 +50,16 @@ namespace IngameScript
                 }
 
                 _chatBroadcastController.UseAntenna = true;
+
+                _logLevel = logLevel;
             }
 
             #endregion
 
-            public void Log(string message)
+            public void Log(string message, LogLevelDc logLevel)
             {
+                if (logLevel < _logLevel) return;
+
                 _chatBroadcastController.SendMessage(message);
             }
         }

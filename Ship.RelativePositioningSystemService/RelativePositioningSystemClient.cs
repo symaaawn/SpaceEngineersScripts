@@ -32,6 +32,8 @@ namespace IngameScript
                 _igc = igc;
 
                 _broadcastTag = programmingBlockConfiguration.ShipId + "/" + _broadcastTag;
+
+                _logger.LogInfo("Initialized RelativePositioningSystemClient");
             }
 
             #endregion
