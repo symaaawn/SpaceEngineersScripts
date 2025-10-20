@@ -55,7 +55,7 @@ namespace IngameScript
 
             _logger.AddLogger(new DetailAreaLogger(Echo));
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
-            _logger.AddLogger(new BroadcastControllerLogger(this));
+            _logger.AddLogger(new BroadcastControllerLogger(this, LogLevelDc.Warning));
 
             _logger.LogDebug($"Starting RefineryService...");
 
@@ -74,7 +74,7 @@ namespace IngameScript
 
             _refineryClient = new RefineryClient(_logger, _refineryServiceConfiguration, IGC);
             _refineryActions = new RefineryActions(_logger, GridTerminalSystem);
-            _refineryManager = new RefineryManager(_logger, _refineryActions, _refineryClient, refineries);
+            _refineryManager = new RefineryManager(_logger, _refineryServiceConfiguration, _refineryActions, _refineryClient, refineries);
             _refineryController = new RefineryController(_logger, _refineryServiceConfiguration, _refineryManager, IGC);
 
             _logger.LogInfo($"RefineryService started.");
@@ -88,7 +88,7 @@ namespace IngameScript
         {
             if ((updateType & UpdateType.IGC) != 0)
             {
-                _logger.LogInfo("Processing IGC messages");
+                _logger.LogDebug("Processing IGC messages");
                 _refineryClient.CheckResponses();
                 _refineryManager.ProcessInventoryResponse();
             }

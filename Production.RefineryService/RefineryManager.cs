@@ -17,6 +17,7 @@ namespace IngameScript
             #region private fields
 
             private readonly Logger _logger;
+            private readonly RefineryServiceConfiguration _refineryServiceConfiguration;
             private readonly RefineryActions _refineryActions;
             private readonly RefineryClient _refineryClient;
 
@@ -30,9 +31,10 @@ namespace IngameScript
 
             #region construction
 
-            public RefineryManager(Logger logger, RefineryActions refineryActions, RefineryClient refineryClient, List<IMyRefinery> refineries)
+            public RefineryManager(Logger logger, RefineryServiceConfiguration refineryServiceConfiguration, RefineryActions refineryActions, RefineryClient refineryClient, List<IMyRefinery> refineries)
             {
                 _logger = logger;
+                _refineryServiceConfiguration = refineryServiceConfiguration;
                 _refineryActions = refineryActions;
                 _refineryClient = refineryClient;
                 RefineryCollection = new RefineryCollection(refineries);
@@ -84,19 +86,33 @@ namespace IngameScript
 
                 var idleRefineries = RefineryCollection.GetIdleRefineries();
 
-                foreach (var item in inventory)
-                {
-                    _logger.LogDebug($" -> Inventory item: {item.Key} = {item.Value}");
-                }
-
                 _logger.LogInfo($"Distributing ores to {idleRefineries.Count} idle refineries");
 
                 foreach (var idleRefinery in idleRefineries)
                 {
-                    _logger.LogDebug($" -> Processing idle refinery {idleRefinery.Name}");
-                    var oreToLoad = inventory.FirstOrDefault(i => i.Value > 0);
-                    _logger.LogDebug($"{oreToLoad.Key}");
-                    var amountToLoad = MyFixedPoint.Min(oreToLoad.Value, (MyFixedPoint)(OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * 5f));
+                    _logger.LogDebug($"-> Processing idle refinery {idleRefinery.Name}");
+                    var oreScores = new Dictionary<string, double>();
+
+                    foreach (var ore in inventory)
+                    {
+                        var oreConsumption = OreConsumptions.GetOreConsumption(ore.Key.Split('/')[1]);
+
+                        var scoreSpeed = oreConsumption.ConversionRatio * idleRefinery.RefineSpeed;
+                        var scoreYield = (1 - oreConsumption.ConversionRatio) * idleRefinery.YieldRate;
+                        var totalScore = scoreSpeed + scoreYield;
+
+                        var plannedOreAmount = (MyFixedPoint)(oreConsumption.KgPerSecond * idleRefinery.RefineSpeed);
+                        var plannedIngotAmount = plannedOreAmount * idleRefinery.YieldRate * oreConsumption.ConversionRatio;
+                        var score = oreConsumption.Priority() * idleRefinery.YieldRate;
+                        _logger.LogDebug($"-> Ore: {ore.Key.Split('/')[1]}, Consumption: {plannedOreAmount}kg/s, Production: {plannedIngotAmount}, ScoreSpeed: {scoreSpeed}, ScoreYield: {scoreYield}, TotalScore: {totalScore}");
+                        
+                        oreScores.Add(ore.Key, totalScore);
+                    }
+                   
+                    var bestOre = oreScores.OrderByDescending(kv => kv.Value).First();
+                    var oreToLoad = inventory.FirstOrDefault(o => o.Key == bestOre.Key);
+
+                    var amountToLoad = MyFixedPoint.Min(oreToLoad.Value, (MyFixedPoint)(OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer));
                     _refineryClient.SendPushRequest(oreToLoad.Key, amountToLoad, idleRefinery.Name);
                 }
             }
