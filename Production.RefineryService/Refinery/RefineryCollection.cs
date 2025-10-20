@@ -16,7 +16,7 @@ namespace IngameScript
         {
             #region private fields
 
-            private List<Refinery> _refineries;
+            private readonly List<Refinery> _refineries;
 
             #endregion
 
@@ -36,6 +36,11 @@ namespace IngameScript
             #region methods
 
             public int RefineryCount => _refineries.Count;
+
+            public List<Refinery> GetRefineries()
+            {
+                return _refineries;
+            }
 
             public Refinery GetRefineryByName(string name)
             {

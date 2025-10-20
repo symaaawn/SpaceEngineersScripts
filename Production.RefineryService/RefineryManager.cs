@@ -28,22 +28,24 @@ namespace IngameScript
 
             #region properties
 
-            private RefineryCollection RefineryCollection { get; set; }
             private StatusLightCollection StatusLightCollection { get; set; }
+            private RefineryServiceDisplayCollection DisplayCollection { get; set; }
+            private RefineryCollection RefineryCollection { get; set; }
 
             #endregion
 
             #region construction
 
             public RefineryManager(Logger logger, RefineryServiceConfiguration refineryServiceConfiguration, RefineryActions refineryActions, RefineryClient refineryClient,
-                List<IMyRefinery> refineries, List<IMyLightingBlock> statusLights)
+                List<IMyLightingBlock> statusLights, List<IMyTextPanel> displays, List<IMyRefinery> refineries)
             {
                 _logger = logger;
                 _refineryServiceConfiguration = refineryServiceConfiguration;
                 _refineryActions = refineryActions;
                 _refineryClient = refineryClient;
-                RefineryCollection = new RefineryCollection(refineries);
                 StatusLightCollection = new StatusLightCollection(statusLights);
+                DisplayCollection = new RefineryServiceDisplayCollection(displays);
+                RefineryCollection = new RefineryCollection(refineries);
 
                 SetServiceState(ServiceStateDc.Auto);
 
@@ -59,11 +61,11 @@ namespace IngameScript
                 switch (serviceState)
                 {
                     case ServiceStateDc.Error:
-                        return;
+                        break;
                     case ServiceStateDc.Manual:
-                        return;
+                        break;
                     case ServiceStateDc.Auto:
-                        var idleRefineries = RefineryCollection.GetIdleRefineries();
+                        var idleRefineries = RefineryCollection.GetIdleRefineries(_refineryServiceConfiguration.RefineryBuffer);
 
                         if (idleRefineries.Count > 0)
                         {
@@ -73,9 +75,10 @@ namespace IngameScript
                         {
                             _logger.LogInfo("No idle refineries found");
                         }
-                        return;
+                        break;
                 }
 
+                DisplayCollection.UpdateDisplays(RefineryCollection, serviceState);
             }
 
             public bool SetServiceState(ServiceStateDc newState)
@@ -116,7 +119,7 @@ namespace IngameScript
                     return;
                 }
 
-                var idleRefineries = RefineryCollection.GetIdleRefineries();
+                var idleRefineries = RefineryCollection.GetIdleRefineries(_refineryServiceConfiguration.RefineryBuffer);
 
                 _logger.LogInfo($"Distributing ores to {idleRefineries.Count} idle refineries");
 
@@ -143,7 +146,7 @@ namespace IngameScript
                    
                     var bestOre = oreScores.OrderByDescending(kv => kv.Value).First();
                     var oreToLoad = inventory.FirstOrDefault(o => o.Key == bestOre.Key);
-
+                    _logger.LogDebug($"Buffer: {_refineryServiceConfiguration.RefineryBuffer} {OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer}");
                     var amountToLoad = MyFixedPoint.Min(oreToLoad.Value, (MyFixedPoint)(OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer));
                     _refineryClient.SendPushRequest(oreToLoad.Key, amountToLoad, idleRefinery.Name);
                 }

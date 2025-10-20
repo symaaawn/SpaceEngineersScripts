@@ -59,17 +59,6 @@ namespace IngameScript
 
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
 
-            var refineries = new List<IMyRefinery>();
-            GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, RefineryServiceTag));
-            if (refineries.Count == 0)
-            {
-                _logger.LogFatal($"No refinery with tag '{RefineryServiceTag}' found.");
-            }
-            else
-            {
-                _logger.LogInfo($"Found {refineries.Count} cargo containers with tag '{RefineryServiceTag}'.");
-            }
-
             var statusLights = new List<IMyLightingBlock>();
             GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, RefineryServiceTag));
             if (statusLights.Count == 0)
@@ -81,9 +70,31 @@ namespace IngameScript
                 _logger.LogInfo($"Found {statusLights.Count} status lights with tag '{RefineryServiceTag}'.");
             }
 
+            var refineries = new List<IMyRefinery>();
+            GridTerminalSystem.GetBlocksOfType(refineries, refinery => MyIni.HasSection(refinery.CustomData, RefineryServiceTag));
+            if (refineries.Count == 0)
+            {
+                _logger.LogFatal($"No refinery with tag '{RefineryServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {refineries.Count} cargo containers with tag '{RefineryServiceTag}'.");
+            }
+
+            var displays = new List<IMyTextPanel>();
+            GridTerminalSystem.GetBlocksOfType(displays, display => MyIni.HasSection(display.CustomData, RefineryServiceTag));
+            if (displays.Count == 0)
+            {
+                _logger.LogWarning($"No display with tag '{RefineryServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {displays.Count} displays with tag '{RefineryServiceTag}'.");
+            }
+
             _refineryClient = new RefineryClient(_logger, _refineryServiceConfiguration, IGC);
             _refineryActions = new RefineryActions(_logger, GridTerminalSystem);
-            _refineryManager = new RefineryManager(_logger, _refineryServiceConfiguration, _refineryActions, _refineryClient, refineries, statusLights);
+            _refineryManager = new RefineryManager(_logger, _refineryServiceConfiguration, _refineryActions, _refineryClient, statusLights, displays, refineries);
             _refineryController = new RefineryController(_logger, _refineryServiceConfiguration, _refineryManager, IGC);
 
             _logger.LogInfo($"RefineryService started.");

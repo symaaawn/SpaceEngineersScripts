@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)contracts\PowerOverviewDc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Display.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisplayCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayPowerOverview.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)helpers\SpriteHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StorageInventoryDisplay.cs" />

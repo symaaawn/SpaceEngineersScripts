@@ -37,7 +37,11 @@ namespace IngameScript
             public float PowerEfficiency { get; set; }
 
             public string Name => _refinery.CustomName;
+            public string Status => _refinery.IsProducing ? "Producing" : "Idle";
+
             public IMyInventory InputInventory => _refinery.InputInventory;
+            public IMyInventory OutputInventory => _refinery.OutputInventory;
+
 
             #endregion
 
