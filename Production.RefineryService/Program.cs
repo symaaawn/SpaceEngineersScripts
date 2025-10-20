@@ -45,8 +45,6 @@ namespace IngameScript
 
         #region properties
 
-        public List<IMyInventory> SourceInventories { get; set; } = new List<IMyInventory>();
-
         #endregion
 
         public Program()
@@ -72,9 +70,20 @@ namespace IngameScript
                 _logger.LogInfo($"Found {refineries.Count} cargo containers with tag '{RefineryServiceTag}'.");
             }
 
+            var statusLights = new List<IMyLightingBlock>();
+            GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, RefineryServiceTag));
+            if (statusLights.Count == 0)
+            {
+                _logger.LogWarning($"No status light with tag '{RefineryServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {statusLights.Count} status lights with tag '{RefineryServiceTag}'.");
+            }
+
             _refineryClient = new RefineryClient(_logger, _refineryServiceConfiguration, IGC);
             _refineryActions = new RefineryActions(_logger, GridTerminalSystem);
-            _refineryManager = new RefineryManager(_logger, _refineryServiceConfiguration, _refineryActions, _refineryClient, refineries);
+            _refineryManager = new RefineryManager(_logger, _refineryServiceConfiguration, _refineryActions, _refineryClient, refineries, statusLights);
             _refineryController = new RefineryController(_logger, _refineryServiceConfiguration, _refineryManager, IGC);
 
             _logger.LogInfo($"RefineryService started.");
@@ -97,6 +106,18 @@ namespace IngameScript
             {
                 _logger.LogDebug($"Main");
                 _refineryManager.Update();
+            }
+
+            if ((updateType & (UpdateType.Trigger | UpdateType.Terminal)) != 0)
+            {
+                _logger.LogDebug($"Processing argument: {argument}");
+                ServiceStateDc state;
+                if (!Enum.TryParse(argument?.Trim(), true, out state))
+                {
+                    _logger.LogError($"Invalid service state: {argument}");
+                    return;
+                }
+                _refineryManager.SetServiceState(state);
             }
         }
     }

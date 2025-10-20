@@ -6,8 +6,7 @@ namespace IngameScript
         {
             Error,
             Manual,
-            Idle,
-            Active
+            Auto
         }
     }
 }

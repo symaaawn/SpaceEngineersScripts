@@ -25,7 +25,7 @@ namespace IngameScript
         #region constants
 
         private static readonly ProgramInformationDc ProgramInformation = new ProgramInformationDc("RelativePositioningSystemService", "0.1.0", LogLevelDc.Debug);
-        private const string ServiceConfigurationSection = "RelativePositioningSystemService";
+        private const string RelativePositioningSystemServiceTag = "RelativePositioningSystemService";
 
         #endregion
 
@@ -50,14 +50,26 @@ namespace IngameScript
             _logger.AddLogger(new ProgrammingBlockLogger(Me));
 
             var statusLights = new List<IMyLightingBlock>();
-            GridTerminalSystem.GetBlocksOfType(statusLights, statusLight => MyIni.HasSection(statusLight.CustomData, ServiceConfigurationSection));
+            GridTerminalSystem.GetBlocksOfType(statusLights, light => MyIni.HasSection(light.CustomData, RelativePositioningSystemServiceTag));
+            if (statusLights.Count == 0)
+            {
+                _logger.LogWarning($"No status light with tag '{RelativePositioningSystemServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {statusLights.Count} status lights with tag '{RelativePositioningSystemServiceTag}'.");
+            }
 
             var referenceControls = new List<IMyRemoteControl>();
-            GridTerminalSystem.GetBlocksOfType(referenceControls, reference => MyIni.HasSection(reference.CustomData, ServiceConfigurationSection));
+            GridTerminalSystem.GetBlocksOfType(referenceControls, reference => MyIni.HasSection(reference.CustomData, RelativePositioningSystemServiceTag));
             var referenceControl = referenceControls.FirstOrDefault();
             if (referenceControl == null)
             {
                 _logger.LogFatal("Could not find reference control");
+            }
+            else
+            {
+                _logger.LogInfo($"Found reference control: {referenceControl.CustomName}");
             }
 
             _relativePositioningSystemClient = new RelativePositioningSystemClient(_logger, _relativePositioningSystemConfiguration, IGC);
@@ -74,9 +86,29 @@ namespace IngameScript
 
         }
 
-        public void Main(string argument, UpdateType updateSource)
+        public void Main(string argument, UpdateType updateType)
         {
-            _relativePositioningSystemManager.Update();
+            if ((updateType & UpdateType.IGC) != 0)
+            {
+                _logger.LogDebug("Processing IGC messages");
+            }
+
+            if ((updateType & (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100)) != 0)
+            {
+                _relativePositioningSystemManager.Update();
+            }
+
+            if ((updateType & (UpdateType.Trigger | UpdateType.Terminal)) != 0)
+            {
+                _logger.LogDebug($"Processing argument: {argument}");
+                ServiceStateDc state;
+                if (!Enum.TryParse(argument?.Trim(), true, out state))
+                {
+                    _logger.LogError($"Invalid service state: {argument}");
+                    return;
+                }
+                _relativePositioningSystemManager.SetServiceState(state);
+            }
         }
     }
 }

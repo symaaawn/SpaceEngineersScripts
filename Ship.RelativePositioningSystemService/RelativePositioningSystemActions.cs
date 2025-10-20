@@ -52,16 +52,7 @@ namespace IngameScript
                         statusLight.Enabled = true;
                     }
                     break;
-                case ServiceStateDc.Idle:
-                    foreach (var statusLight in statusLights)
-                    {
-                        if (!statusLight.IsWorking)
-                            continue;
-                        statusLight.Color = Color.Yellow;
-                        statusLight.Enabled = true;
-                    }
-                    break;
-                case ServiceStateDc.Active:
+                case ServiceStateDc.Auto:
                     foreach (var statusLight in statusLights)
                     {
                         if (!statusLight.IsWorking)

@@ -42,4 +42,6 @@
 
     <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
 
+    <Import Project="..\Common.StatusLights\Common.StatusLights.projitems" Label="Shared" />
+
 </Project>

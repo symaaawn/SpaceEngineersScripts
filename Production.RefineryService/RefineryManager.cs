@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VRage;
 using VRage.Game.ModAPI.Ingame;
+using VRageMath;
 
 namespace IngameScript
 {
@@ -15,6 +16,8 @@ namespace IngameScript
         public class RefineryManager
         {
             #region private fields
+
+            private ServiceStateDc serviceState;
 
             private readonly Logger _logger;
             private readonly RefineryServiceConfiguration _refineryServiceConfiguration;
@@ -26,18 +29,23 @@ namespace IngameScript
             #region properties
 
             private RefineryCollection RefineryCollection { get; set; }
+            private StatusLightCollection StatusLightCollection { get; set; }
 
             #endregion
 
             #region construction
 
-            public RefineryManager(Logger logger, RefineryServiceConfiguration refineryServiceConfiguration, RefineryActions refineryActions, RefineryClient refineryClient, List<IMyRefinery> refineries)
+            public RefineryManager(Logger logger, RefineryServiceConfiguration refineryServiceConfiguration, RefineryActions refineryActions, RefineryClient refineryClient,
+                List<IMyRefinery> refineries, List<IMyLightingBlock> statusLights)
             {
                 _logger = logger;
                 _refineryServiceConfiguration = refineryServiceConfiguration;
                 _refineryActions = refineryActions;
                 _refineryClient = refineryClient;
                 RefineryCollection = new RefineryCollection(refineries);
+                StatusLightCollection = new StatusLightCollection(statusLights);
+
+                SetServiceState(ServiceStateDc.Auto);
 
                 _logger.LogInfo("Initialized RefineryManager");
             }
@@ -48,16 +56,40 @@ namespace IngameScript
 
             public void Update()
             {
-                var idleRefineries = RefineryCollection.GetIdleRefineries();
+                switch (serviceState)
+                {
+                    case ServiceStateDc.Error:
+                        return;
+                    case ServiceStateDc.Manual:
+                        return;
+                    case ServiceStateDc.Auto:
+                        var idleRefineries = RefineryCollection.GetIdleRefineries();
 
-                if (idleRefineries.Count > 0)
-                {
-                    _refineryClient.SendGetInventoryItems();
+                        if (idleRefineries.Count > 0)
+                        {
+                            _refineryClient.SendGetInventoryItems();
+                        }
+                        else
+                        {
+                            _logger.LogInfo("No idle refineries found");
+                        }
+                        return;
                 }
-                else
+
+            }
+
+            public bool SetServiceState(ServiceStateDc newState)
+            {
+                if (serviceState != newState)
                 {
-                    _logger.LogInfo("No idle refineries found");
+                    serviceState = newState;
+                    _logger.LogInfo($"Refinery service state changed to {serviceState}");
+                    StatusLightCollection.UpdateLights(serviceState);
+
+                    return true;
                 }
+
+                return false;
             }
 
             public void ProcessInventoryResponse()

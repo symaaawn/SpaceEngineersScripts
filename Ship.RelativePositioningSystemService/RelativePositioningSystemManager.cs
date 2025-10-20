@@ -14,13 +14,18 @@ namespace IngameScript
         {
             #region private fields
 
+            private ServiceStateDc serviceState;
+
             private readonly Logger _logger;
             private readonly RelativePositioningSystemActions _relativePositioningSystemActions;
             private readonly RelativePositioningSystemClient _relativePositioningSystemClient;
-            private List<IMyLightingBlock> _statusLights;
-            private IMyRemoteControl _referencePoint;
+            private readonly IMyRemoteControl _referencePoint;
 
-            private ServiceStateDc State { get; set; } = ServiceStateDc.Active;
+            #endregion
+
+            #region properties
+
+            private StatusLightCollection StatusLightCollection { get; set; }
 
             #endregion
 
@@ -32,8 +37,10 @@ namespace IngameScript
                 _logger = logger;
                 _relativePositioningSystemActions = relativePositioningSystemActions;
                 _relativePositioningSystemClient = relativePositioningSystemClient;
-                _statusLights = statusLights;
                 _referencePoint = referencePoint;
+                StatusLightCollection = new StatusLightCollection(statusLights);
+
+                SetServiceState(ServiceStateDc.Auto);
 
                 _logger.LogInfo("Initialized RelativePositioningSystemManager");
             }
@@ -44,27 +51,35 @@ namespace IngameScript
 
             public void Update()
             {
-                UpdateStatus();
-                BroadcastPosition();
+                switch (serviceState)
+                {
+                    case ServiceStateDc.Error:
+                        break;
+                    case ServiceStateDc.Manual:
+                        break;
+                    case ServiceStateDc.Auto:
+                        BroadcastPosition();
+                        break;
+                }
+            }
+
+            public bool SetServiceState(ServiceStateDc newState)
+            {
+                if (serviceState != newState)
+                {
+                    serviceState = newState;
+                    _logger.LogInfo($"RPS service state changed to {serviceState}");
+                    StatusLightCollection.UpdateLights(serviceState);
+
+                    return true;
+                }
+
+                return false;
             }
 
             #endregion
 
             #region private methods
-
-            private void UpdateStatus()
-            {
-                if (_referencePoint == null || !_referencePoint.IsWorking)
-                {
-                    State = ServiceStateDc.Error;
-                    _logger.LogError("No reference point defined");
-                }
-                else
-                {
-                    State = ServiceStateDc.Active;
-                }
-                _relativePositioningSystemActions.UpdateStatusLights(_statusLights, State);
-            }
 
             private void BroadcastPosition() 
             {

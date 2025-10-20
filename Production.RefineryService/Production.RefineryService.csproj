@@ -31,4 +31,5 @@
   <Import Project="..\Common.Logging\Common.Logging.projitems" Label="Shared" />
   <Import Project="..\Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems" Label="Shared" />
   <Import Project="..\Common.Utilities\Common.Utilities.projitems" Label="Shared" />
+  <Import Project="..\Common.StatusLights\Common.StatusLights.projitems" Label="Shared" />
 </Project>
