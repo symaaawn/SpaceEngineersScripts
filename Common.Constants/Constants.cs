@@ -4,7 +4,7 @@
     {
         #region constants
 
-        public const string CompanyName = "Symeon Mining Corporation";
+        public const string CompanyName = "Symtech Mining Solutions";
 
         #endregion
     }
