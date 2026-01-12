@@ -6,7 +6,10 @@
         {
             Ores,
             Ingots,
-            Components
+            Components,
+            Gas,
+            Tools,
+            Uncategorized
         }
     }
 }

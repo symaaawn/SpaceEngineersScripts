@@ -44,7 +44,6 @@ namespace IngameScript
         private readonly InventoryServiceConfiguration _inventoryServiceConfiguration;
 
         private readonly InventoryManager _inventoryManager;
-        private readonly InventoryActions _inventoryActions;
         private readonly InventoryController _inventoryController;
 
         #endregion
@@ -76,8 +75,7 @@ namespace IngameScript
                 _logger.LogInfo($"Found {cargoContainers.Count} cargo containers with tag '{InventoryServiceTag}'.");
             }
 
-            _inventoryActions = new InventoryActions(_logger, GridTerminalSystem);
-            _inventoryManager = new InventoryManager(_logger, _inventoryActions, cargoContainers);
+            _inventoryManager = new InventoryManager(_logger, GridTerminalSystem, cargoContainers);
             _inventoryController = new InventoryController(_logger, _inventoryServiceConfiguration, _inventoryManager, IGC);
 
         }

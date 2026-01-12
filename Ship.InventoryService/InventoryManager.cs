@@ -18,7 +18,7 @@ namespace IngameScript
             #region private fields
 
             private readonly Logger _logger;
-            private readonly InventoryActions _inventoryActions;
+            private readonly IMyGridTerminalSystem _gridTerminalSystem;
 
             #endregion
 
@@ -30,12 +30,12 @@ namespace IngameScript
 
             #region construction
 
-            public InventoryManager(Logger logger, InventoryActions inventoryActions, List<IMyCargoContainer> cargoContainers)
+            public InventoryManager(Logger logger, IMyGridTerminalSystem gridTerminalSystem, List<IMyCargoContainer> cargoContainers)
             {
                 _logger = logger;
-                _inventoryActions = inventoryActions;
-                CargoContainerCollection = new CargoContainerCollection(cargoContainers);
-                _logger.LogInfo($"Initialized InventoryManager with {CargoContainerCollection.ContainerCount} cargo containers. ({CargoContainerCollection.ItemCount} items)");
+                _gridTerminalSystem = gridTerminalSystem;
+                CargoContainerCollection = new CargoContainerCollection(logger, cargoContainers);
+                _logger.LogInfo($"Initialized InventoryManager with {CargoContainerCollection.ContainerCount} cargo containers.");
             }
 
             #endregion
@@ -51,25 +51,14 @@ namespace IngameScript
                 // ToDo: Check for low/high stock and trigger transfers or consolidate inventories
             }
 
-            public List<MyInventoryItem> GetInventory()
+            public Dictionary<string, MyFixedPoint> GetInventory()
             {
-                var items = new List<MyInventoryItem>();
-                var tempItems = new List<MyInventoryItem>();
-                var cargoContainerInventories = CargoContainerCollection.GetInventories();
-
-                foreach (var inventory in cargoContainerInventories)
-                {
-                    inventory.GetItems(tempItems);
-                    items.AddRange(tempItems);
-                    tempItems.Clear();
-                }
-
-                return items;
+                return CargoContainerCollection.GetInventoryItems();
             }
 
             public bool PullItems(InventoryServiceMessage_PullItems pullMessage)
             {
-                var sourceInventory = _inventoryActions.GetSourceInventory(pullMessage.SourceInventory);
+                var sourceInventory = GetOutputInventory(pullMessage.SourceInventory);
                 if (sourceInventory == null)
                 {
                     _logger.LogError($"Source inventory '{pullMessage.SourceInventory}' not found.");
@@ -78,18 +67,21 @@ namespace IngameScript
 
                 var itemType = (MyItemType)MyDefinitionId.Parse(pullMessage.Item);
 
-                if (!_inventoryActions.TransferItems(sourceInventory, CargoContainerCollection.GetCargoContainerWithEnoughSpace(itemType, pullMessage.Amount).Inventory, itemType, pullMessage.Amount))
+                var transferred = CargoContainerCollection.PullItems(itemType, pullMessage.Amount, sourceInventory);
+
+                if (!transferred)
                 {
-                    _logger.LogError($"Failed to pull items '{pullMessage.Item}' from '{pullMessage.SourceInventory}'.");
-                    return false;
+                    _logger.LogError($"Failed to pull {pullMessage.Amount} of {pullMessage.Item} from {pullMessage.SourceInventory}.");
                 }
 
-                return true;
+                return transferred;
             }
 
             public bool PushItems(InventoryServiceMessage_PushItems pushMessage)
             {
-                var targetInventory = _inventoryActions.GetTargetInventory(pushMessage.TargetInventory);
+                _logger.LogDebug($"Attempting to push {pushMessage.Amount} of {pushMessage.Item} to {pushMessage.TargetInventory}.");
+
+                var targetInventory = GetInputInventory(pushMessage.TargetInventory);
                 if (targetInventory == null)
                 {
                     _logger.LogError($"Target inventory '{pushMessage.TargetInventory}' not found.");
@@ -98,41 +90,60 @@ namespace IngameScript
 
                 var itemType = (MyItemType)MyDefinitionId.Parse(pushMessage.Item);
 
-                if (!_inventoryActions.TransferItems(CargoContainerCollection.GetCargoContainerWithItem(itemType, pushMessage.Amount).Inventory, targetInventory, itemType, pushMessage.Amount))
+                var transferred = CargoContainerCollection.PushItems(itemType, pushMessage.Amount, targetInventory);
+
+                _logger.LogDebug($"Push operation result: {transferred}");
+
+                if (!transferred)
                 {
-                    _logger.LogError($"Failed to push items '{pushMessage.Item}' to '{pushMessage.TargetInventory}'.");
-                    return false;
+                    _logger.LogError($"Failed to push {pushMessage.Amount} of {pushMessage.Item} to {pushMessage.TargetInventory}.");
                 }
 
-                return true;
-            }
-
-            public bool TransferItems(string source, string target, MyItemType itemType, MyFixedPoint amount)
-            {
-                var sourceCargoContainer = CargoContainerCollection.GetCargoContainerByName(source);
-                if (sourceCargoContainer == null)
-                {
-                    _logger.LogError($"Source cargo container '{source}' not found.");
-                    return false;
-                }
-
-                var targetCargoContainer = CargoContainerCollection.GetCargoContainerByName(source);
-                if (targetCargoContainer == null)
-                {
-                    _logger.LogError($"Target cargo container '{target}' not found.");
-                    return false;
-                }
-
-                return _inventoryActions.TransferItems(sourceCargoContainer.Inventory, targetCargoContainer.Inventory, itemType, amount);
+                return transferred;
             }
 
             #endregion
 
             #region private methods
 
-            private void ConsolidateInventories()
+            private IMyInventory GetOutputInventory(string productionBlockName)
             {
+                var productionBlock = _gridTerminalSystem.GetBlockWithName(productionBlockName);
 
+                if (productionBlock == null)
+                {
+                    _logger.LogError($"Production block with name {productionBlockName} not found.");
+                    return null;
+                }
+
+                if (productionBlock is IMyProductionBlock)
+                {
+                    var prodBlock = productionBlock as IMyProductionBlock;
+                    return prodBlock.OutputInventory;
+                }
+
+                _logger.LogError($"Block with name {productionBlockName} is not a production block.");
+                return null;
+            }
+
+            private IMyInventory GetInputInventory(string productionBlockName)
+            {
+                var productionBlock = _gridTerminalSystem.GetBlockWithName(productionBlockName);
+
+                if (productionBlock == null)
+                {
+                    _logger.LogError($"Production block with name {productionBlockName} not found.");
+                    return null;
+                }
+
+                if (productionBlock is IMyProductionBlock)
+                {
+                    var prodBlock = productionBlock as IMyProductionBlock;
+                    return prodBlock.InputInventory;
+                }
+
+                _logger.LogError($"Block with name {productionBlockName} is not a production block.");
+                return null;
             }
 
             #endregion

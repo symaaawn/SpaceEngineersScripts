@@ -26,7 +26,6 @@ namespace IngameScript
             public string Name => _cargoContainer.CustomName;
             public CargoContainerTypeDc CargoContainerType => _cargoContainerConfiguration.CargoContainerType;
             public int FillPriority => _cargoContainerConfiguration.FillPriority;
-            public List<InventoryItem> Items { get; private set; } = new List<InventoryItem>();
             public IMyInventory Inventory => _cargoContainer.GetInventory();
 
             #endregion
@@ -37,13 +36,6 @@ namespace IngameScript
             {
                 _cargoContainer = cargoContainer;
                 _cargoContainerConfiguration = new CargoContainerConfiguration(_cargoContainer, new MyIni());
-
-                var items = new List<MyInventoryItem>();
-                _cargoContainer.GetInventory().GetItems(items);
-                foreach (var item in items)
-                {
-                    Items.Add(new InventoryItem(item, cargoContainer.GetInventory()));
-                }
             }
 
             #endregion

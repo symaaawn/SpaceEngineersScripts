@@ -82,20 +82,14 @@ namespace IngameScript
                                 _logger.LogDebug($"Received GetInventory request");
                                 var inventory = _inventoryManager.GetInventory();
 
-                                var inventoryDict = new Dictionary<string, MyFixedPoint>();
-                                foreach (var item in inventory)
-                                {
-                                    inventoryDict.Add(item.Type.ToString(), item.Amount);
-                                }
-
                                 var responseMessage = new InventoryServiceMessage_GetInventory()
                                 {
                                     RequestId = getMessage.RequestId,
                                     Method = "GetInventory",
-                                    Inventory = inventoryDict
+                                    Inventory = inventory
                                 };
 
-                                _logger.LogDebug($"Sending GetInventory response: {string.Join(", ", inventoryDict.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
+                                _logger.LogDebug($"Sending GetInventory response: {string.Join(", ", inventory.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
                                 _igc.SendBroadcastMessage(_inventoryResponseTag, responseMessage.Serialize());
                             }
                             else
