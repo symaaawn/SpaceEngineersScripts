@@ -64,6 +64,11 @@ namespace IngameScript
                 return idleRefineries;
             }
 
+            public List<Refinery> GetRefineriesWithOutputInventoryItems()
+            {
+                return _refineries.Where(r => r.OutputInventory.ItemCount > 0).ToList();
+            }
+
             #endregion
         }
     }

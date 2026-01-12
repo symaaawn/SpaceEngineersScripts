@@ -79,6 +79,11 @@ namespace IngameScript
                 }
 
                 DisplayCollection.UpdateDisplays(RefineryCollection, serviceState);
+
+                if(serviceState == ServiceStateDc.Auto)
+                {
+                    EmptyRefineryOutputInventories();
+                }
             }
 
             public bool SetServiceState(ServiceStateDc newState)
@@ -113,6 +118,8 @@ namespace IngameScript
 
             public void DistributeOres(Dictionary<string, MyFixedPoint> inventory)
             {
+                inventory = inventory.Where(kv => ItemType.IsOre(kv.Key)).ToDictionary(kv => kv.Key, kv => kv.Value);
+
                 if (inventory == null || inventory.Count == 0)
                 {
                     _logger.LogWarning("No inventory to distribute");
@@ -147,8 +154,26 @@ namespace IngameScript
                     var bestOre = oreScores.OrderByDescending(kv => kv.Value).First();
                     var oreToLoad = inventory.FirstOrDefault(o => o.Key == bestOre.Key);
                     _logger.LogDebug($"Buffer: {_refineryServiceConfiguration.RefineryBuffer} {OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer}");
+
                     var amountToLoad = MyFixedPoint.Min(oreToLoad.Value, (MyFixedPoint)(OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer));
                     _refineryClient.SendPushRequest(oreToLoad.Key, amountToLoad, idleRefinery.Name);
+                }
+            }
+
+            public void EmptyRefineryOutputInventories()
+            {
+                var refineries = RefineryCollection.GetRefineriesWithOutputInventoryItems();
+                foreach (var refinery in refineries)
+                {
+                    _logger.LogDebug($"Emptying output inventory of refinery {refinery.Name}");
+
+                    var refineryOutputItems = new List<MyInventoryItem>();
+                    refinery.OutputInventory.GetItems(refineryOutputItems);
+                    foreach (var item in refineryOutputItems)
+                    {
+                        _logger.LogDebug($"-> Item: {item.Type.SubtypeId}, Amount: {item.Amount}");
+                        _refineryClient.SendPullRequest(item.Type.ToString(), item.Amount, refinery.Name);
+                    }
                 }
             }
 

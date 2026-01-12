@@ -133,9 +133,25 @@ namespace IngameScript
                 _igc.SendBroadcastMessage(_inventoryRequestTag, message.Serialize());
             }
 
-            public void SendPullRequest()
+            public void SendPullRequest(string item, MyFixedPoint amount, string sourceInventory)
             {
+                var message = new InventoryServiceMessage_PullItems()
+                {
+                    RequestId = ++_messageCount,
+                    Method = "PullItems",
+                    Item = item,
+                    Amount = amount,
+                    SourceInventory = sourceInventory
+                };
 
+                _logger.LogDebug($"Sending PullItems request: tag={_inventoryRequestTag}");
+
+                foreach (var line in message.Serialize())
+                {
+                    _logger.LogDebug($"{line.Key}: {line.Value}");
+                }
+
+                _igc.SendBroadcastMessage(_inventoryRequestTag, message.Serialize());
             }
 
             public void SendPushRequest(string item, MyFixedPoint amount, string targetInventory)
