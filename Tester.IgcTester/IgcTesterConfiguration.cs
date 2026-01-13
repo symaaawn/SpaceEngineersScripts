@@ -16,7 +16,7 @@ namespace IngameScript
             #region constants
 
             private const string _igcTesterConfigurationSection = "IgcTesterConfiguration";
-            private const string _listenerTagKey = "listenerTag";
+            private const string _listenerTagKey = "ListenerTag";
 
             #endregion
 

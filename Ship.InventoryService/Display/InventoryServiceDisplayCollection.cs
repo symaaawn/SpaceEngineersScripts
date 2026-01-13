@@ -22,29 +22,29 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class RefineryServiceDisplayCollection : DisplayCollection
+        public class InventoryServiceDisplayCollection : DisplayCollection
         {
             #region construction
 
-            public RefineryServiceDisplayCollection(List<IMyTextPanel> displays) : base(displays) { }
+            public InventoryServiceDisplayCollection(List<IMyTextPanel> displays) : base(displays) { }
 
             #endregion
 
             #region methods
 
-            public void UpdateDisplays(RefineryCollection refineryCollection, ServiceStateDc serviceState)
+            public void UpdateDisplays(CargoContainerCollection cargoContainerCollection, ServiceStateDc serviceState)
             {
                 var infos = new List<string>
                 {
-                    $"Refinery Service State: {serviceState}",
+                    $"Inventory Service State: {serviceState}",
                     $"",
-                    string.Format("{0,-12} {1,-6}", "Refinery", "Status"),
+                    string.Format("{0,-12} {1,-10}", "Container", "Status"),
                     "--------------------------------"
                 };
 
-                foreach (var refinery in refineryCollection.GetRefineries().OrderBy(r => r.Name))
+                foreach (var cargoContainer in cargoContainerCollection.GetCargoContainers().OrderBy(c => c.Name))
                 {
-                    infos.Add(string.Format("{0,-12} {1,-6}", refinery.Name, refinery.Status));
+                    infos.Add(string.Format("{0,-12} {1, 8}/{2, 8}", cargoContainer.Name, cargoContainer.Inventory.CurrentVolume.FormatFixedPoint(), cargoContainer.Inventory.MaxVolume.FormatFixedPoint()));
                 }
 
                 foreach (var display in _displays)

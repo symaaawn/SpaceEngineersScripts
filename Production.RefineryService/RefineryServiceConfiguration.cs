@@ -16,7 +16,7 @@ namespace IngameScript
             #region constants
 
             private const string _RefineryServiceConfigurationSection = "RefineryServiceConfiguration";
-            private const string _refineryBuffer = "refineryBuffer";
+            private const string _refineryBuffer = "RefineryBuffer";
 
             #endregion
 

@@ -27,6 +27,7 @@ namespace IngameScript
             #region private fields
 
             private readonly IMyRefinery _refinery;
+            private readonly BaseConfiguration _refineryConfiguration;
 
             #endregion
 
@@ -36,7 +37,10 @@ namespace IngameScript
             public float YieldRate { get; set; }
             public float PowerEfficiency { get; set; }
 
-            public string Name => _refinery.CustomName;
+            public string Name => string.IsNullOrEmpty(_refineryConfiguration.DisplayName) 
+                ? _refinery.CustomName
+                : _refineryConfiguration.DisplayName;
+            public string SystemName => _refinery.CustomName;
             public string Status => _refinery.IsProducing ? "Producing" : "Idle";
 
             public IMyInventory InputInventory => _refinery.InputInventory;
@@ -50,6 +54,9 @@ namespace IngameScript
             public Refinery(IMyRefinery refinery)
             {
                 _refinery = refinery;
+
+                _refineryConfiguration = new BaseConfiguration(_refinery, new MyIni());
+
                 var detailedInfo = RefineryDetailedInfoParser.Parse(_refinery.DetailedInfo);
                 RefineSpeed = detailedInfo.RefineSpeed;
                 YieldRate = detailedInfo.YieldRate;

@@ -17,6 +17,8 @@ namespace IngameScript
         {
             #region private fields
 
+            private ServiceStateDc serviceState;
+
             private readonly Logger _logger;
             private readonly IMyGridTerminalSystem _gridTerminalSystem;
 
@@ -24,19 +26,24 @@ namespace IngameScript
 
             #region properties
 
+            private InventoryServiceDisplayCollection InventoryServiceDisplayCollection { get; set; }
             private CargoContainerCollection CargoContainerCollection { get; set; }
 
             #endregion
 
             #region construction
 
-            public InventoryManager(Logger logger, IMyGridTerminalSystem gridTerminalSystem, List<IMyCargoContainer> cargoContainers)
+            public InventoryManager(Logger logger, IMyGridTerminalSystem gridTerminalSystem, List<IMyTextPanel> displays, List<IMyCargoContainer> cargoContainers)
             {
                 _logger = logger;
                 _gridTerminalSystem = gridTerminalSystem;
+                InventoryServiceDisplayCollection = new InventoryServiceDisplayCollection(displays);
                 CargoContainerCollection = new CargoContainerCollection(logger, cargoContainers);
-                _logger.LogInfo($"Initialized InventoryManager with {CargoContainerCollection.ContainerCount} cargo containers.");
-            }
+
+                serviceState = ServiceStateDc.Auto;
+
+            _logger.LogInfo($"Initialized InventoryManager with {CargoContainerCollection.ContainerCount} cargo containers.");
+        }
 
             #endregion
 
@@ -47,6 +54,7 @@ namespace IngameScript
                 // Update logic for inventory management:
 
                 // ToDo: Update inventory displays
+                InventoryServiceDisplayCollection.UpdateDisplays(CargoContainerCollection, serviceState);
 
                 // ToDo: Check for low/high stock and trigger transfers or consolidate inventories
             }

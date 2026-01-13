@@ -156,7 +156,7 @@ namespace IngameScript
                     _logger.LogDebug($"Buffer: {_refineryServiceConfiguration.RefineryBuffer} {OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer}");
 
                     var amountToLoad = MyFixedPoint.Min(oreToLoad.Value, (MyFixedPoint)(OreConsumptions.GetOreConsumption(oreToLoad.Key.Split('/')[1]).KgPerSecond * _refineryServiceConfiguration.RefineryBuffer));
-                    _refineryClient.SendPushRequest(oreToLoad.Key, amountToLoad, idleRefinery.Name);
+                    _refineryClient.SendPushRequest(oreToLoad.Key, amountToLoad, idleRefinery.SystemName);
                 }
             }
 
@@ -172,7 +172,7 @@ namespace IngameScript
                     foreach (var item in refineryOutputItems)
                     {
                         _logger.LogDebug($"-> Item: {item.Type.SubtypeId}, Amount: {item.Amount}");
-                        _refineryClient.SendPullRequest(item.Type.ToString(), item.Amount, refinery.Name);
+                        _refineryClient.SendPullRequest(item.Type.ToString(), item.Amount, refinery.SystemName);
                     }
                 }
             }

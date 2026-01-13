@@ -27,13 +27,15 @@ namespace IngameScript
             #region constants
 
             private const string _baseServiceConfigurationSection = "BaseConfiguration";
-            private const string _shipIdKey = "shipId";
+            private const string _shipIdKey = "ShipId";
+            private const string _displayName = "DisplayName";
 
             #endregion
 
             #region properties
 
             public string ShipId { get; private set; }
+            public string DisplayName { get; private set; }
 
             #endregion
 
@@ -46,6 +48,7 @@ namespace IngameScript
                     throw new Exception(result.ToString());
 
                 ShipId = ini.Get(_baseServiceConfigurationSection, _shipIdKey).ToString();
+                DisplayName = ini.Get(_baseServiceConfigurationSection, _displayName).ToString();
             }
 
             #endregion

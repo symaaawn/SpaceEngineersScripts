@@ -1,4 +1,5 @@
-﻿using Sandbox.ModAPI.Ingame;
+﻿using Sandbox.Game;
+using Sandbox.ModAPI.Ingame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,25 @@ namespace IngameScript
             #region methods
 
             public int ContainerCount => _cargoContainers.Count;
+
+            public List<CargoContainer> GetCargoContainers()
+            {
+                return _cargoContainers;
+            }
+
+            public void SortContainerInventoryItems()
+            {
+                foreach (var cargoContainer in _cargoContainers)
+                {
+                    var inventory = cargoContainer.Inventory;
+                    _tempMyInventoryItems.Clear();
+
+                    inventory.GetItems(_tempMyInventoryItems);
+                    foreach (var item in _tempMyInventoryItems)
+                    {
+                    }
+                }
+            }
 
             public Dictionary<string, MyFixedPoint> GetInventoryItems()
             {
@@ -99,7 +119,39 @@ namespace IngameScript
                         break;
                 }
 
-                return _cargoContainers.FirstOrDefault(c => c.CanItemsBeAdded(amount, itemType) && c.CargoContainerType == containerType).Inventory.TransferItemFrom(sourceInventory, inventoryItem.Value, amount);
+                var suitableContainers = _cargoContainers.Where(c => c.CargoContainerType == containerType && !c.Inventory.IsFull);
+                if (!suitableContainers.Any())
+                {
+                    _logger.LogError($"No suitable cargo container found for item type {itemType}");
+                    return false;
+                }
+
+                var suitableContainer = suitableContainers.FirstOrDefault(c => c.CanItemsBeAdded(amount, itemType));
+                if (suitableContainer != null)
+                {
+                    return _cargoContainers.FirstOrDefault(c => c.CanItemsBeAdded(amount, itemType) && c.CargoContainerType == containerType).Inventory.TransferItemFrom(sourceInventory, inventoryItem.Value, amount);
+                }
+
+                foreach (var cargoContainer in suitableContainers)
+                {
+                    var availableSpace = cargoContainer.Inventory.MaxVolume - cargoContainer.Inventory.CurrentVolume;
+
+                    var amountToTransfer = MyFixedPoint.Min(availableSpace, amount);
+                    var result = cargoContainer.Inventory.TransferItemFrom(sourceInventory, inventoryItem.Value, amountToTransfer);
+                    if (!result)
+                    {
+                        continue;
+                    }
+
+                    amount -= amountToTransfer;
+                    if (amount <= 0)
+                    {
+                        return true;
+                    }
+                }
+
+                _logger.LogError($"Not enough space to pull {amount} of {itemType}");
+                return false;
             }
 
             public bool PushItems(MyItemType itemType, MyFixedPoint amount, IMyInventory targetInventory)
@@ -130,6 +182,11 @@ namespace IngameScript
             }
 
             #endregion
+
+            private IMyInventory[] GetInventories()
+            {
+                return _cargoContainers.Select(c => c.Inventory).ToArray();
+            }
         }
     }
 }

@@ -36,5 +36,12 @@ namespace IngameScript
 
             return s;
         }
+
+        public static string FormatFixedPoint(this MyFixedPoint value)
+        {
+            double doubleValue = (double)value;
+            string formatString = "F" + 3;
+            return doubleValue.ToString(formatString);
+        }
     }
 }

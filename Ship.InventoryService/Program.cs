@@ -75,7 +75,18 @@ namespace IngameScript
                 _logger.LogInfo($"Found {cargoContainers.Count} cargo containers with tag '{InventoryServiceTag}'.");
             }
 
-            _inventoryManager = new InventoryManager(_logger, GridTerminalSystem, cargoContainers);
+            var displays = new List<IMyTextPanel>();
+            GridTerminalSystem.GetBlocksOfType(displays, display => MyIni.HasSection(display.CustomData, InventoryServiceTag));
+            if (displays.Count == 0)
+            {
+                _logger.LogWarning($"No display with tag '{InventoryServiceTag}' found.");
+            }
+            else
+            {
+                _logger.LogInfo($"Found {displays.Count} displays with tag '{InventoryServiceTag}'.");
+            }
+
+            _inventoryManager = new InventoryManager(_logger, GridTerminalSystem, displays, cargoContainers);
             _inventoryController = new InventoryController(_logger, _inventoryServiceConfiguration, _inventoryManager, IGC);
 
         }

@@ -15,8 +15,8 @@ namespace IngameScript
             #region constants
 
             private const string _cargoContainerConfigurationSection = "CargoContainerConfiguration";
-            private const string _cargoContainerTypeKey = "type";
-            private const string _fillPriorityKey = "fillPriority";
+            private const string _cargoContainerTypeKey = "Type";
+            private const string _fillPriorityKey = "FillPriority";
 
             #endregion
 
