@@ -43,6 +43,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ship.InventoryService.Contr
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.StatusLights", "Common.StatusLights\Common.StatusLights.shproj", "{38D91C7B-84F5-4C27-BC30-6A61C43F11EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Production.AssemblerService", "Production.AssemblerService\Production.AssemblerService.csproj", "{AC17818F-C903-443D-BD5E-69E3F136B51F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -85,6 +87,10 @@ Global
 		{7D603B03-21C5-47D1-B490-69B0C514696E}.Debug|x64.Build.0 = Debug|x64
 		{7D603B03-21C5-47D1-B490-69B0C514696E}.Release|x64.ActiveCfg = Release|x64
 		{7D603B03-21C5-47D1-B490-69B0C514696E}.Release|x64.Build.0 = Release|x64
+		{AC17818F-C903-443D-BD5E-69E3F136B51F}.Debug|x64.ActiveCfg = Debug|x64
+		{AC17818F-C903-443D-BD5E-69E3F136B51F}.Debug|x64.Build.0 = Debug|x64
+		{AC17818F-C903-443D-BD5E-69E3F136B51F}.Release|x64.ActiveCfg = Release|x64
+		{AC17818F-C903-443D-BD5E-69E3F136B51F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,15 @@ Global
 		Common.Logging\Common.Logging.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Common.Utilities\Common.Utilities.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
 		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{ab043293-38af-4f47-8301-059f4dc39da6}*SharedItemsImports = 5
+		Common.Configuration\Common.Configuration.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.Constants\Common.Constants.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.Contracts\Common.Contracts.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.Displays\Common.Displays.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.IgcMessageBase\Common.IgcMessageBase.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.Logging\Common.Logging.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.StatusLights\Common.StatusLights.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Common.Utilities\Common.Utilities.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
+		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{ac17818f-c903-443d-bd5e-69e3f136b51f}*SharedItemsImports = 5
 		Ship.RelativePositioningSystemService.Contracts\Ship.RelativePositioningSystemService.Contracts.projitems*{b4def387-721e-4b3e-9566-946ea649b725}*SharedItemsImports = 13
 		Ship.InventoryService.Contracts\Ship.InventoryService.Contracts.projitems*{cc301d45-24dc-4ec3-99e7-a1013cff0b94}*SharedItemsImports = 13
 		Common.Constants\Common.Constants.projitems*{cce7df76-ed69-489f-96f0-f56e344ec97d}*SharedItemsImports = 5

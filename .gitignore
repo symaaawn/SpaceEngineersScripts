@@ -384,3 +384,4 @@ FodyWeavers.xsd
 /Production.RefineryService/Production.RefineryService.mdk.local.ini
 /Tester.IgcTester/Tester.IgcTester.mdk.local.ini
 /Ship.RelativePositioningSystemService/Ship.RelativePositioningSystemService.mdk.local.ini
+/Production.AssemblerService/Production.AssemblerService.mdk.local.ini
